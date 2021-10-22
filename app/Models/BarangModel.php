@@ -8,5 +8,10 @@ class BarangModel extends Model
 {
     protected $table                = 'barang';
     protected $primaryKey           = 'id_barang';
-    protected $allowedFields        = ['nama_barang', 'jml_brg', 'deskripsi', 'foto', 'tgl_perolehan', 'harga'];
+    protected $allowedFields        = ['id_kategori', 'nama_barang', 'jml_brg', 'deskripsi', 'foto', 'tgl_perolehan', 'harga'];
+
+    public function getData()
+    {
+        return $this->join('kategori', 'kategori.id_kategori=barang.id_kategori')->findAll();
+    }
 }
