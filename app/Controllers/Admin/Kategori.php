@@ -16,6 +16,7 @@ class Kategori extends BaseController
     public function index()
     {
         $data = [
+            'title'    => 'Data Kategori',
             'kategori' => $this->kategoriModel->findAll()
         ];
         return json_encode($data);
@@ -24,7 +25,7 @@ class Kategori extends BaseController
     public function tambah()
     {
         $data = [
-            'title' => 'Form Tambah Kategori',
+            'title'    => 'Form Tambah Kategori',
             'validasi' => \Config\Services::validation()
         ];
         return json_encode($data);
@@ -35,7 +36,7 @@ class Kategori extends BaseController
         //Validasi
         if (!$this->validate([
             'nama_kategori' => [
-                'rules' => 'required',
+                'rules'  => 'required',
                 'errors' => [
                     'required' => 'Nama kategori harus diisi.'
                 ]
@@ -56,7 +57,7 @@ class Kategori extends BaseController
     public function edit($id)
     {
         $data = [
-            'title' => 'Form Edit Kategori',
+            'title'    => 'Form Edit Kategori',
             'kategori' => $this->kategoriModel->find($id),
             'validasi' => \Config\Services::validation()
         ];
@@ -68,7 +69,7 @@ class Kategori extends BaseController
         //Validasi
         if (!$this->validate([
             'nama_kategori' => [
-                'rules' => 'required',
+                'rules'  => 'required',
                 'errors' => [
                     'required' => 'Nama kategori harus diisi.'
                 ]

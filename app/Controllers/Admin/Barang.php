@@ -18,6 +18,7 @@ class Barang extends BaseController
     public function index()
     {
         $data = [
+            'title'  => 'Data Barang',
             'barang' => $this->barangModel->getData()
         ];
         return json_encode($data);
@@ -26,7 +27,7 @@ class Barang extends BaseController
     public function tambah()
     {
         $data = [
-            'title' => 'Form Tambah Barang',
+            'title'    => 'Form Tambah Barang',
             'kategori' => $this->kategoriModel->findAll(),
             'validasi' => \Config\Services::validation()
         ];
@@ -38,20 +39,20 @@ class Barang extends BaseController
         //Validasi
         if (!$this->validate([
             'nama_barang' => [
-                'rules' => 'required',
+                'rules'  => 'required',
                 'errors' => [
                     'required' => 'Nama barang harus diisi.'
                 ]
             ],
             'jml_brg' => [
-                'rules' => 'required|integer',
+                'rules'  => 'required|integer',
                 'errors' => [
                     'required' => 'Jumlah barang harus diisi.',
-                    'integer' => 'Harus berupa angka.'
+                    'integer'  => 'Harus berupa angka.'
                 ]
             ],
             'deskripsi' => [
-                'rules' => 'required',
+                'rules'  => 'required',
                 'errors' => [
                     'required' => 'Deskripsi harus diisi.'
                 ]
@@ -61,12 +62,12 @@ class Barang extends BaseController
                 'errors' => [
                     'uploaded' => 'Foto harus diisi.',
                     'is_image' => 'File harus berupa gambar',
-                    'mime_in' => 'File harus berupa gambar',
+                    'mime_in'  => 'File harus berupa gambar',
                     'max_size' => 'Ukuran maksimal 1mb',
                 ]
             ],
             'tgl_perolehan' => [
-                'rules' => 'required',
+                'rules'  => 'required',
                 'errors' => [
                     'required' => 'Tanggal harus diisi.'
                 ]
@@ -75,7 +76,7 @@ class Barang extends BaseController
                 'rules' => 'required|integer',
                 'errors' => [
                     'required' => 'Harga harus diisi.',
-                    'integer' => 'Harus berupa angka.'
+                    'integer'  => 'Harus berupa angka.'
                 ]
             ],
         ])) {
@@ -91,13 +92,13 @@ class Barang extends BaseController
         $fileFoto->move('files/barang', $namaFoto);
 
         $this->barangModel->save([
-            'id_kategori' => $this->request->getVar('id_kategori'),
-            'nama_barang' => $this->request->getVar('nama_barang'),
-            'jml_brg' => $this->request->getVar('jml_brg'),
-            'deskripsi' => $this->request->getVar('deskripsi'),
-            'foto' => $namaFoto,
+            'id_kategori'   => $this->request->getVar('id_kategori'),
+            'nama_barang'   => $this->request->getVar('nama_barang'),
+            'jml_brg'       => $this->request->getVar('jml_brg'),
+            'deskripsi'     => $this->request->getVar('deskripsi'),
+            'foto'          => $namaFoto,
             'tgl_perolehan' => $this->request->getVar('tgl_perolehan'),
-            'harga' => $this->request->getVar('harga'),
+            'harga'         => $this->request->getVar('harga'),
         ]);
 
         session()->setFlashdata('pesan', 'Data berhasil ditambahkan.');
@@ -107,8 +108,8 @@ class Barang extends BaseController
     public function edit($id)
     {
         $data = [
-            'title' => 'Form Edit Barang',
-            'barang' => $this->barangModel->find($id),
+            'title'    => 'Form Edit Barang',
+            'barang'   => $this->barangModel->find($id),
             'kategori' => $this->kategoriModel->findAll(),
             'validasi' => \Config\Services::validation()
         ];
@@ -120,20 +121,20 @@ class Barang extends BaseController
         //Validasi
         if (!$this->validate([
             'nama_barang' => [
-                'rules' => 'required',
+                'rules'  => 'required',
                 'errors' => [
                     'required' => 'Nama barang harus diisi.'
                 ]
             ],
             'jml_brg' => [
-                'rules' => 'required|integer',
+                'rules'  => 'required|integer',
                 'errors' => [
                     'required' => 'Jumlah barang harus diisi.',
-                    'integer' => 'Harus berupa angka.'
+                    'integer'  => 'Harus berupa angka.'
                 ]
             ],
             'deskripsi' => [
-                'rules' => 'required',
+                'rules'  => 'required',
                 'errors' => [
                     'required' => 'Deskripsi harus diisi.'
                 ]
@@ -143,21 +144,21 @@ class Barang extends BaseController
                 'errors' => [
                     'uploaded' => 'Foto harus diisi.',
                     'is_image' => 'File harus berupa gambar',
-                    'mime_in' => 'File harus berupa gambar',
+                    'mime_in'  => 'File harus berupa gambar',
                     'max_size' => 'Ukuran maksimal 1mb',
                 ]
             ],
             'tgl_perolehan' => [
-                'rules' => 'required',
+                'rules'  => 'required',
                 'errors' => [
                     'required' => 'Tanggal harus diisi.'
                 ]
             ],
             'harga' => [
-                'rules' => 'required|integer',
+                'rules'  => 'required|integer',
                 'errors' => [
                     'required' => 'Harga harus diisi.',
-                    'integer' => 'Harus berupa angka.'
+                    'integer'  => 'Harus berupa angka.'
                 ]
             ],
         ])) {
@@ -182,13 +183,13 @@ class Barang extends BaseController
         }
 
         $this->barangModel->update($id, [
-            'id_kategori' => $this->request->getVar('id_kategori'),
-            'nama_barang' => $this->request->getVar('nama_barang'),
-            'jml_brg' => $this->request->getVar('jml_brg'),
-            'deskripsi' => $this->request->getVar('deskripsi'),
-            'foto' => $namaFoto,
+            'id_kategori'   => $this->request->getVar('id_kategori'),
+            'nama_barang'   => $this->request->getVar('nama_barang'),
+            'jml_brg'       => $this->request->getVar('jml_brg'),
+            'deskripsi'     => $this->request->getVar('deskripsi'),
+            'foto'          => $namaFoto,
             'tgl_perolehan' => $this->request->getVar('tgl_perolehan'),
-            'harga' => $this->request->getVar('harga'),
+            'harga'         => $this->request->getVar('harga'),
         ]);
 
         session()->setFlashdata('pesan', 'Data berhasil diubah.');
