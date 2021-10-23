@@ -28,7 +28,7 @@ class Barang extends BaseController
     {
         $data = [
             'title'    => 'Form Tambah Barang',
-            'kategori' => $this->kategoriModel->findAll(),
+            'kategori' => $this->kategoriModel->findAll(), // Dropdown
             'validasi' => \Config\Services::validation()
         ];
         return json_encode($data);
@@ -110,7 +110,7 @@ class Barang extends BaseController
         $data = [
             'title'    => 'Form Edit Barang',
             'barang'   => $this->barangModel->find($id),
-            'kategori' => $this->kategoriModel->findAll(),
+            'kategori' => $this->kategoriModel->findAll(), // Dropdown
             'validasi' => \Config\Services::validation()
         ];
         return json_encode($data);

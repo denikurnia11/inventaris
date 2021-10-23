@@ -30,8 +30,8 @@ class PinjamBarang extends BaseController
     {
         $data = [
             'title'     => 'Form Peminjaman Barang',
-            'barang'    => $this->barangModel->findAll(),
-            'peminjam'  => $this->peminjamModel->findAll(),
+            'barang'    => $this->barangModel->findAll(), // Dropdown
+            'peminjam'  => $this->peminjamModel->findAll(), // Dropdown
             'validasi'  => \Config\Services::validation()
         ];
         return json_encode($data);
@@ -61,10 +61,11 @@ class PinjamBarang extends BaseController
                 ]
             ],
             'surat' => [
-                'rules'  => 'ext_in[surat,pdf,docx]|max_size[surat,1024]',
+                'rules'  => 'uploaded[surat]|ext_in[surat,pdf,docx]|max_size[surat,1024]',
                 'errors' => [
-                    'ext_in'   => 'File harus berextensi pdf atau word',
-                    'max_size' => 'File maksimal 1mb.',
+                    'uploaded'   => 'File harus diisi.',
+                    'ext_in'     => 'File harus berextensi pdf atau word',
+                    'max_size'   => 'File maksimal 1mb.',
                 ]
             ],
         ])) {
@@ -98,8 +99,8 @@ class PinjamBarang extends BaseController
         $data = [
             'title'     => 'Form Edit Peminjaman Barang',
             'pinjamBrg' => $this->pinjamBrgModel->find($id),
-            'barang'    => $this->barangModel->findAll(),
-            'peminjam'  => $this->peminjamModel->findAll(),
+            'barang'    => $this->barangModel->findAll(), // Dropdown
+            'peminjam'  => $this->peminjamModel->findAll(), // Dropdown
             'validasi'  => \Config\Services::validation()
         ];
         return json_encode($data);

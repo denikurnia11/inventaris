@@ -30,8 +30,8 @@ class PinjamRuangan extends BaseController
     {
         $data = [
             'title'     => 'Form Peminjaman Ruangan',
-            'ruangan'   => $this->ruanganModel->findAll(),
-            'peminjam'  => $this->peminjamModel->findAll(),
+            'ruangan'   => $this->ruanganModel->findAll(), // Dropdown
+            'peminjam'  => $this->peminjamModel->findAll(), // Dropdown
             'validasi'  => \Config\Services::validation()
         ];
         return json_encode($data);
@@ -54,10 +54,11 @@ class PinjamRuangan extends BaseController
                 ]
             ],
             'surat' => [
-                'rules'  => 'ext_in[surat,pdf,docx]|max_size[surat,1024]',
+                'rules'  => 'uploaded[surat]|ext_in[surat,pdf,docx]|max_size[surat,1024]',
                 'errors' => [
-                    'ext_in'   => 'File harus berextensi pdf atau word',
-                    'max_size' => 'File maksimal 1mb.',
+                    'uploaded'   => 'File harus diisi.',
+                    'ext_in'     => 'File harus berextensi pdf atau word',
+                    'max_size'   => 'File maksimal 1mb.',
                 ]
             ],
         ])) {
@@ -90,8 +91,8 @@ class PinjamRuangan extends BaseController
         $data = [
             'title'         => 'Form Edit Peminjaman Ruangan',
             'pinjamRuangan' => $this->pinjamRuangModel->find($id),
-            'ruangan'       => $this->ruanganModel->findAll(),
-            'peminjam'      => $this->peminjamModel->findAll(),
+            'ruangan'       => $this->ruanganModel->findAll(), // Dropdown
+            'peminjam'      => $this->peminjamModel->findAll(), // Dropdown
             'validasi'      => \Config\Services::validation()
         ];
         return json_encode($data);
