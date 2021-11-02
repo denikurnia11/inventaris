@@ -21,7 +21,7 @@ class Barang extends BaseController
             'title'  => 'Data Barang',
             'barang' => $this->barangModel->getData()
         ];
-        return json_encode($data);
+        return view('barang/index', $data);
     }
 
     public function tambah()
