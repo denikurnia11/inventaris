@@ -68,6 +68,13 @@
 
   <!-- Custom Theme JavaScript -->
   <script src="<?= base_url('dist/js/sb-admin-2.js') ?>"></script>
+  <script>
+    $(document).ready(function() {
+      $('#dataTables-example').DataTable({
+        responsive: true
+      });
+    });
+  </script>
 </body>
 
 </html>

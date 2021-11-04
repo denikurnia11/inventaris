@@ -94,13 +94,7 @@
 </div>
 
 <!-- Page-Level Demo Scripts - Tables - Use for reference -->
-<script>
-  $(document).ready(function() {
-    $('#dataTables-example').DataTable({
-      responsive: true
-    });
-  });
-</script>
+
 
 <!-- <script type="text/javascript">
   $(function() {
