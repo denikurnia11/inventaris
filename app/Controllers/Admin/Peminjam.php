@@ -38,16 +38,34 @@ class Peminjam extends BaseController
     {
         //Validasi
         if (!$this->validate([
+            'id_user' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'User harus diisi.'
+                ]
+            ],
             'nama_peminjam' => [
                 'rules'  => 'required',
                 'errors' => [
                     'required' => 'Nama peminjam harus diisi.'
                 ]
             ],
-            'telp' => [
+            'nama_instansi' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Nama instansi harus diisi.'
+                ]
+            ],
+            'no_hp' => [
                 'rules'  => 'required',
                 'errors' => [
                     'required' => 'Nomor telepon harus diisi.'
+                ]
+            ],
+            'status' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Status harus diisi.'
                 ]
             ],
         ])) {
@@ -58,7 +76,9 @@ class Peminjam extends BaseController
         $this->peminjamModel->save([
             'id_user'       => $this->request->getVar('id_user'),
             'nama_peminjam' => $this->request->getVar('nama_peminjam'),
-            'telp'          => $this->request->getVar('telp'),
+            'nama_instansi' => $this->request->getVar('nama_instansi'),
+            'no_hp'          => $this->request->getVar('no_hp'),
+            'status'          => $this->request->getVar('no_hp'),
         ]);
 
         session()->setFlashdata('pesan', 'Data berhasil ditambahkan.');
@@ -80,16 +100,34 @@ class Peminjam extends BaseController
     {
         //Validasi
         if (!$this->validate([
+            'id_user' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'User harus diisi.'
+                ]
+            ],
             'nama_peminjam' => [
                 'rules'  => 'required',
                 'errors' => [
                     'required' => 'Nama peminjam harus diisi.'
                 ]
             ],
-            'telp' => [
+            'nama_instansi' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Nama instansi harus diisi.'
+                ]
+            ],
+            'no_hp' => [
                 'rules'  => 'required',
                 'errors' => [
                     'required' => 'Nomor telepon harus diisi.'
+                ]
+            ],
+            'status' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Status harus diisi.'
                 ]
             ],
         ])) {
@@ -100,7 +138,9 @@ class Peminjam extends BaseController
         $this->peminjamModel->update($id, [
             'id_user'       => $this->request->getVar('id_user'),
             'nama_peminjam' => $this->request->getVar('nama_peminjam'),
-            'telp'          => $this->request->getVar('telp'),
+            'nama_instansi' => $this->request->getVar('nama_instansi'),
+            'no_hp'         => $this->request->getVar('no_hp'),
+            'status'        => $this->request->getVar('no_hp'),
         ]);
 
         session()->setFlashdata('pesan', 'Data berhasil diubah.');

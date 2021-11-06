@@ -8,7 +8,7 @@ class BarangModel extends Model
 {
     protected $table                = 'barang';
     protected $primaryKey           = 'id_barang';
-    protected $allowedFields        = ['id_kategori', 'nama_barang', 'jml_brg', 'deskripsi', 'foto', 'tgl_perolehan', 'harga'];
+    protected $allowedFields        = ['id_kategori', 'nama_barang', 'jml_barang', 'deskripsi', 'foto', 'tgl_perolehan', 'harga'];
 
     public function getData()
     {

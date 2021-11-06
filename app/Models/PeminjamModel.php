@@ -8,7 +8,7 @@ class PeminjamModel extends Model
 {
     protected $table                = 'peminjam';
     protected $primaryKey           = 'id_peminjam';
-    protected $allowedFields        = ['id_user', 'nama_peminjam', 'telp'];
+    protected $allowedFields        = ['id_user', 'nama_peminjam', 'nama_instansi', 'no_hp', 'status'];
 
     public function getData()
     {

@@ -3,25 +3,23 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
-use App\Models\PeminjamanRuanganModel;
+use App\Models\PeminjamanModel;
 use App\Models\PeminjamModel;
-use App\Models\RuanganModel;
 
-class PinjamRuangan extends BaseController
+class Peminjaman extends BaseController
 {
-    protected $ruanganModel, $peminjamModel, $pinjamBrgModel;
+    protected $peminjamModel, $peminjamanModel;
     public function __construct()
     {
-        $this->ruanganModel = new RuanganModel();
         $this->peminjamModel = new PeminjamModel();
-        $this->pinjamRuangModel = new PeminjamanRuanganModel();
+        $this->peminjamanModel = new PeminjamanModel();
     }
 
     public function index()
     {
         $data = [
-            'title'         => 'Data Peminjaman Ruangan',
-            'pinjamRuangan' => $this->pinjamRuangModel->getData()
+            'title'     => 'Data Peminjaman',
+            'peminjaman' => $this->peminjamanModel->getData()
         ];
         return json_encode($data);
     }
@@ -29,8 +27,7 @@ class PinjamRuangan extends BaseController
     public function tambah()
     {
         $data = [
-            'title'     => 'Form Peminjaman Ruangan',
-            'ruangan'   => $this->ruanganModel->findAll(), // Dropdown
+            'title'     => 'Form Peminjaman Barang',
             'peminjam'  => $this->peminjamModel->findAll(), // Dropdown
             'validasi'  => \Config\Services::validation()
         ];
@@ -41,19 +38,25 @@ class PinjamRuangan extends BaseController
     {
         //Validasi
         if (!$this->validate([
-            'tgl_pinjam' => [
+            'id_peminjam' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Peminjam harus diisi.'
+                ]
+            ],
+            'tgl_permohonan' => [
                 'rules'  => 'required',
                 'errors' => [
                     'required' => 'Tanggal harus diisi.'
                 ]
             ],
-            'tgl_kembali' => [
+            'keperluan' => [
                 'rules'  => 'required',
                 'errors' => [
-                    'required' => 'Tanggal harus diisi.'
+                    'required' => 'Harga harus diisi.'
                 ]
             ],
-            'surat' => [
+            'surat_peminjaman' => [
                 'rules'  => 'uploaded[surat]|ext_in[surat,pdf,docx]|max_size[surat,1024]',
                 'errors' => [
                     'uploaded'   => 'File harus diisi.',
@@ -63,7 +66,7 @@ class PinjamRuangan extends BaseController
             ],
         ])) {
             // Redirect
-            return redirect()->to(base_url() . '/admin/pinjamruangan/tambah')->withInput();
+            return redirect()->to(base_url() . '/admin/peminjaman/tambah')->withInput();
         }
 
         // Mengambil surat
@@ -73,27 +76,24 @@ class PinjamRuangan extends BaseController
         // Move ke folder public/files/surat
         $fileSurat->move('files/surat', $namaSurat);
 
-        $this->pinjamRuangModel->save([
-            'id_peminjam'   => $this->request->getVar('id_peminjam'),
-            'id_ruangan'    => $this->request->getVar('id_ruangan'),
-            'tgl_pinjam'    => $this->request->getVar('tgl_pinjam'),
-            'tgl_kembali'   => $this->request->getVar('tgl_kembali'),
-            'status'        => $this->request->getVar('status'),
-            'surat'         => $namaSurat
+        $this->pinjamBrgModel->save([
+            'id_peminjam'       => $this->request->getVar('id_peminjam'),
+            'tgl_permohonan'    => $this->request->getVar('tgl_permohonan'),
+            'keperluan'         => $this->request->getVar('keperluan'),
+            'surat_peminjaman'  => $namaSurat
         ]);
 
         session()->setFlashdata('pesan', 'Data berhasil ditambahkan.');
-        return redirect()->to(base_url() . '/admin/pinjamruangan');
+        return redirect()->to(base_url() . '/admin/peminjaman');
     }
 
     public function edit($id)
     {
         $data = [
-            'title'         => 'Form Edit Peminjaman Ruangan',
-            'pinjamRuangan' => $this->pinjamRuangModel->find($id),
-            'ruangan'       => $this->ruanganModel->findAll(), // Dropdown
-            'peminjam'      => $this->peminjamModel->findAll(), // Dropdown
-            'validasi'      => \Config\Services::validation()
+            'title'     => 'Form Edit Peminjaman Barang',
+            'peminjaman' => $this->peminjamanModel->find($id),
+            'peminjam'  => $this->peminjamModel->findAll(), // Dropdown
+            'validasi'  => \Config\Services::validation()
         ];
         return json_encode($data);
     }
@@ -102,28 +102,35 @@ class PinjamRuangan extends BaseController
     {
         //Validasi
         if (!$this->validate([
-            'tgl_pinjam' => [
+            'id_peminjam' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Peminjam harus diisi.'
+                ]
+            ],
+            'tgl_permohonan' => [
                 'rules'  => 'required',
                 'errors' => [
                     'required' => 'Tanggal harus diisi.'
                 ]
             ],
-            'tgl_kembali' => [
+            'keperluan' => [
                 'rules'  => 'required',
                 'errors' => [
-                    'required' => 'Tanggal harus diisi.'
+                    'required' => 'Harga harus diisi.'
                 ]
             ],
-            'surat' => [
-                'rules'  => 'ext_in[surat,pdf,docx]|max_size[surat,1024]',
+            'surat_peminjaman' => [
+                'rules'  => 'uploaded[surat]|ext_in[surat,pdf,docx]|max_size[surat,1024]',
                 'errors' => [
-                    'ext_in'   => 'File harus berextensi pdf atau word',
-                    'max_size' => 'File maksimal 1mb.',
+                    'uploaded'   => 'File harus diisi.',
+                    'ext_in'     => 'File harus berextensi pdf atau word',
+                    'max_size'   => 'File maksimal 1mb.',
                 ]
             ],
         ])) {
             // Redirect
-            return redirect()->to(base_url() . '/admin/pinjamruangan/edit' . $id)->withInput();
+            return redirect()->to(base_url() . '/admin/peminjaman/edit' . $id)->withInput();
         }
 
         // Mengambil surat baru
@@ -142,29 +149,26 @@ class PinjamRuangan extends BaseController
             unlink('files/surat/' . $suratLama);
         }
 
-        $this->pinjamRuangModel->update($id, [
-            'id_peminjam'   => $this->request->getVar('id_peminjam'),
-            'id_barang'     => $this->request->getVar('id_barang'),
-            'tgl_pinjam'    => $this->request->getVar('tgl_pinjam'),
-            'tgl_kembali'   => $this->request->getVar('tgl_kembali'),
-            'jml_brg'       => $this->request->getVar('jml_brg'),
-            'status'        => $this->request->getVar('status'),
-            'surat'         => $namaSurat
+        $this->pinjamBrgModel->update($id, [
+            'id_peminjam'       => $this->request->getVar('id_peminjam'),
+            'tgl_permohonan'    => $this->request->getVar('tgl_permohonan'),
+            'keperluan'         => $this->request->getVar('keperluan'),
+            'surat_peminjaman'  => $namaSurat
         ]);
 
         session()->setFlashdata('pesan', 'Data berhasil diubah.');
-        return redirect()->to(base_url() . '/admin/pinjamruangan');
+        return redirect()->to(base_url() . '/admin/peminjaman');
     }
 
     public function hapus($id)
     {
         // Nama surat
-        $namaSurat = $this->pinjamRuangModel->find($id);
+        $namaSurat = $this->pinjamBrgModel->find($id);
         // Hapus file surat
         unlink('files/barang/' . $namaSurat['surat']);
         // Hapus data
-        $this->pinjamRuangModel->delete($id);
+        $this->pinjamBrgModel->delete($id);
         session()->setFlashdata('pesan', 'Data berhasil dihapus.');
-        return redirect()->to(base_url() . '/admin/pinjamruangan');
+        return redirect()->to(base_url() . '/admin/peminjaman');
     }
 }

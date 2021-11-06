@@ -41,17 +41,19 @@ class User extends BaseController
                     'required' => 'Nama harus diisi.'
                 ]
             ],
-            'email' => [ // Apakah unique ?
-                'rules'  => 'required|valid_email',
+            'email' => [
+                'rules'  => 'required|valid_email|is_unique[user.email]',
                 'errors' => [
                     'required' => 'Email harus diisi.',
                     'valid_email' => 'Email tidak valid.',
+                    'is_unique' => 'Email sudah terdaftar.',
                 ]
             ],
             'username' => [
-                'rules'  => 'required', // Apakah unique ?
+                'rules'  => 'required|is_unique[user.username]',
                 'errors' => [
                     'required' => 'Username harus diisi.',
+                    'is_unique' => 'Username sudah terdaftar.',
                 ]
             ],
             'password' => [
@@ -61,6 +63,12 @@ class User extends BaseController
                     'min_length' => ' Minimal 4 karakter.',
                 ]
             ],
+            'role' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Role harus diisi.'
+                ]
+            ],
         ])) {
             // Redirect
             return redirect()->to(base_url() . '/admin/user/tambah')->withInput();
@@ -68,9 +76,9 @@ class User extends BaseController
 
         $this->userModel->save([
             'nama_lengkap'  => $this->request->getVar('nama_lengkap'),
-            'email'         => $this->request->getVar('email'),
+            'email'         => strtolower($this->request->getVar('email')),
             'username'      => $this->request->getVar('username'),
-            'password'      => md5($this->request->getVar('password')),
+            'password'      => sha1($this->request->getVar('password')),
             'role'          => $this->request->getVar('role'),
         ]);
 
@@ -90,6 +98,24 @@ class User extends BaseController
 
     public function update($id)
     {
+        // Cek apakah mengganti nilainya
+        // Cek apakah mengganti email
+        $emailLama = $this->request->getVar('emailLama');
+        $emailBaru = strtolower($this->request->getVar('email'));
+        if ($emailBaru == $emailLama) {
+            $rulesEmail = 'required|valid_email';
+        } else {
+            $rulesEmail = 'required|is_unique[user.email]|valid_email';
+        }
+        // Cek apakah mengganti username
+        $usernameLama = $this->request->getVar('usernameLama');
+        $usernameBaru = strtolower($this->request->getVar('username'));
+        if ($usernameBaru == $usernameLama) {
+            $rulesUsername = 'required';
+        } else {
+            $rulesUsername = 'required|is_unique[user.username]';
+        }
+
         //Validasi
         if (!$this->validate([
             'nama_lengkap' => [
@@ -98,17 +124,19 @@ class User extends BaseController
                     'required' => 'Nama harus diisi.'
                 ]
             ],
-            'email' => [ // Apakah unique ?
-                'rules'  => 'required|valid_email',
+            'email' => [
+                'rules'  => $rulesEmail,
                 'errors' => [
                     'required' => 'Email harus diisi.',
                     'valid_email' => 'Email tidak valid.',
+                    'is_unique' => 'Email sudah terdaftar.',
                 ]
             ],
             'username' => [
-                'rules'  => 'required', // Apakah unique ?
+                'rules'  => $rulesUsername,
                 'errors' => [
                     'required' => 'Username harus diisi.',
+                    'is_unique' => 'Username sudah terdaftar.',
                 ]
             ],
             'password' => [
@@ -118,6 +146,12 @@ class User extends BaseController
                     'min_length' => ' Minimal 4 karakter.',
                 ]
             ],
+            'role' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Role harus diisi.'
+                ]
+            ],
         ])) {
             // Redirect
             return redirect()->to(base_url() . '/admin/user/edit/' . $id)->withInput();
@@ -125,9 +159,9 @@ class User extends BaseController
 
         $this->userModel->update($id, [
             'nama_lengkap'  => $this->request->getVar('nama_lengkap'),
-            'email'         => $this->request->getVar('email'),
-            'username'      => $this->request->getVar('username'),
-            'password'      => md5($this->request->getVar('password')), // Harus Input password lama
+            'email'         => $emailBaru,
+            'username'      => $usernameBaru,
+            'password'      => sha1($this->request->getVar('password')), // Harus Input password lama/baru
             'role'          => $this->request->getVar('role'),
         ]);
 

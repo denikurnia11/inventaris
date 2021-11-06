@@ -48,6 +48,12 @@ class Ruangan extends BaseController
                     'integer'  => 'Harus berupa angka.'
                 ]
             ],
+            'status' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Status harus diisi.'
+                ]
+            ],
             'deskripsi' => [
                 'rules'  => 'required',
                 'errors' => [
@@ -62,6 +68,7 @@ class Ruangan extends BaseController
         $this->ruanganModel->save([
             'nama_ruangan' => $this->request->getVar('nama_ruangan'),
             'kapasitas'    => $this->request->getVar('kapasitas'),
+            'status'       => $this->request->getVar('status'),
             'deskripsi'    => $this->request->getVar('deskripsi'),
         ]);
 
@@ -96,6 +103,12 @@ class Ruangan extends BaseController
                     'integer'  => 'Harus berupa angka.'
                 ]
             ],
+            'status' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Status harus diisi.'
+                ]
+            ],
             'deskripsi' => [
                 'rules'  => 'required',
                 'errors' => [
@@ -110,6 +123,7 @@ class Ruangan extends BaseController
         $this->ruanganModel->update($id, [
             'nama_ruangan' => $this->request->getVar('nama_ruangan'),
             'kapasitas'    => $this->request->getVar('kapasitas'),
+            'status'       => $this->request->getVar('status'),
             'deskripsi'    => $this->request->getVar('deskripsi'),
         ]);
 

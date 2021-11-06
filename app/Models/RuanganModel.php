@@ -8,5 +8,5 @@ class RuanganModel extends Model
 {
     protected $table                = 'ruangan';
     protected $primaryKey           = 'id_ruangan';
-    protected $allowedFields        = ['nama_ruangan', 'kapasitas', 'deskripsi'];
+    protected $allowedFields        = ['nama_ruangan', 'kapasitas', 'status', 'deskripsi'];
 }

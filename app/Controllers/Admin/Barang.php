@@ -44,7 +44,7 @@ class Barang extends BaseController
                     'required' => 'Nama barang harus diisi.'
                 ]
             ],
-            'jml_brg' => [
+            'jml_barang' => [
                 'rules'  => 'required|integer',
                 'errors' => [
                     'required' => 'Jumlah barang harus diisi.',
@@ -94,7 +94,7 @@ class Barang extends BaseController
         $this->barangModel->save([
             'id_kategori'   => $this->request->getVar('id_kategori'),
             'nama_barang'   => $this->request->getVar('nama_barang'),
-            'jml_brg'       => $this->request->getVar('jml_brg'),
+            'jml_barang'       => $this->request->getVar('jml_barang'),
             'deskripsi'     => $this->request->getVar('deskripsi'),
             'foto'          => $namaFoto,
             'tgl_perolehan' => $this->request->getVar('tgl_perolehan'),
@@ -126,7 +126,7 @@ class Barang extends BaseController
                     'required' => 'Nama barang harus diisi.'
                 ]
             ],
-            'jml_brg' => [
+            'jml_barang' => [
                 'rules'  => 'required|integer',
                 'errors' => [
                     'required' => 'Jumlah barang harus diisi.',
@@ -185,7 +185,7 @@ class Barang extends BaseController
         $this->barangModel->update($id, [
             'id_kategori'   => $this->request->getVar('id_kategori'),
             'nama_barang'   => $this->request->getVar('nama_barang'),
-            'jml_brg'       => $this->request->getVar('jml_brg'),
+            'jml_barang'       => $this->request->getVar('jml_barang'),
             'deskripsi'     => $this->request->getVar('deskripsi'),
             'foto'          => $namaFoto,
             'tgl_perolehan' => $this->request->getVar('tgl_perolehan'),
