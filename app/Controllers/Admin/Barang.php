@@ -31,11 +31,12 @@ class Barang extends BaseController
             'kategori' => $this->kategoriModel->findAll(), // Dropdown
             'validasi' => \Config\Services::validation()
         ];
-        return json_encode($data);
+        return view('barang/tambah', $data);
     }
 
     public function save()
     {
+        // dd($this->request->getVar());
         //Validasi
         if (!$this->validate([
             'nama_barang' => [
@@ -92,7 +93,7 @@ class Barang extends BaseController
         $fileFoto->move('files/barang', $namaFoto);
 
         $this->barangModel->save([
-            'id_kategori'   => $this->request->getVar('id_kategori'),
+            'id_kategori'   => 1,
             'nama_barang'   => $this->request->getVar('nama_barang'),
             'jml_barang'       => $this->request->getVar('jml_barang'),
             'deskripsi'     => $this->request->getVar('deskripsi'),
@@ -113,7 +114,7 @@ class Barang extends BaseController
             'kategori' => $this->kategoriModel->findAll(), // Dropdown
             'validasi' => \Config\Services::validation()
         ];
-        return json_encode($data);
+        return view('barang/edit', $data);
     }
 
     public function update($id)

@@ -16,7 +16,6 @@
   <!-- Bootstrap Core CSS -->
   <link href="<?= base_url('css/datepicker.css') ?>" rel="stylesheet">
 
-
   <!-- Custom Isi CSS -->
   <link href="<?= base_url('vendor/bootstrap/css/custom.css') ?>" rel="stylesheet">
 
@@ -37,18 +36,22 @@
 
   <!-- Custom Fonts -->
   <link href="<?= base_url('vendor/font-awesome/css/font-awesome.min.css') ?>" rel="stylesheet" type="text/css">
+
+  <script src="<?= base_url('vendor/jquery/jquery.min.js') ?>"></script>
+  <script src="<?= base_url('dist/js/sb-admin-2.js') ?>"></script>
+
+  <style>
+    #page-wrapper {
+      min-height: 94vh;
+    }
+  </style>
 </head>
 
 <body>
-  <div id="wrapper">
-    <?= $this->include('layouts/navbar') ?>
-    <div id="page-wrapper">
-      <?= $this->renderSection('content') ?>
-    </div>
+  <?= $this->include('layouts/navbar') ?>
+  <div id="page-wrapper">
+    <?= $this->renderSection('content') ?>
   </div>
-
-  <!-- JQuery -->
-  <script src="<?= base_url('vendor/jquery/jquery.min.js') ?>"></script>
 
   <!-- Bootstrap -->
   <script src="<?= base_url('vendor/bootstrap/js/bootstrap.min.js') ?>"></script>
@@ -66,8 +69,6 @@
   <script src="<?= base_url('vendor/datatables-plugins/dataTables.bootstrap.min.js') ?>"></script>
   <script src="<?= base_url('vendor/datatables-responsive/dataTables.responsive.js') ?>"></script>
 
-  <!-- Custom Theme JavaScript -->
-  <script src="<?= base_url('dist/js/sb-admin-2.js') ?>"></script>
   <script>
     $(document).ready(function() {
       $('#dataTables-example').DataTable({

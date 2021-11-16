@@ -19,7 +19,7 @@ class User extends BaseController
             'title' => 'Data User',
             'user'  => $this->userModel->findAll()
         ];
-        return json_encode($data);
+        return view('user/index', $data);
     }
 
     public function tambah()
@@ -28,7 +28,7 @@ class User extends BaseController
             'title'    => 'Form Tambah User',
             'validasi' => \Config\Services::validation()
         ];
-        return json_encode($data);
+        return view('user/tambah', $data);
     }
 
     public function save()
@@ -93,7 +93,7 @@ class User extends BaseController
             'user' => $this->userModel->find($id),
             'validasi' => \Config\Services::validation()
         ];
-        return json_encode($data);
+        return view('user/edit', $data);
     }
 
     public function update($id)

@@ -19,7 +19,7 @@ class Ruangan extends BaseController
             'title'   => 'Data Ruangan',
             'ruangan' => $this->ruanganModel->findAll()
         ];
-        return json_encode($data);
+        return view('ruangan/index', $data);
     }
 
     public function tambah()
@@ -28,7 +28,7 @@ class Ruangan extends BaseController
             'title'    => 'Form Tambah Ruangan',
             'validasi' => \Config\Services::validation()
         ];
-        return json_encode($data);
+        return view('ruangan/tambah', $data);
     }
 
     public function save()
@@ -83,7 +83,7 @@ class Ruangan extends BaseController
             'ruangan'  => $this->ruanganModel->find($id),
             'validasi' => \Config\Services::validation()
         ];
-        return json_encode($data);
+        return view('ruangan/edit', $data);
     }
 
     public function update($id)

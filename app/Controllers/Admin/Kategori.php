@@ -19,7 +19,7 @@ class Kategori extends BaseController
             'title'    => 'Data Kategori',
             'kategori' => $this->kategoriModel->findAll()
         ];
-        return json_encode($data);
+        return view('kategori/index', $data);
     }
 
     public function tambah()
@@ -28,7 +28,7 @@ class Kategori extends BaseController
             'title'    => 'Form Tambah Kategori',
             'validasi' => \Config\Services::validation()
         ];
-        return json_encode($data);
+        return view('kategori/tambah', $data);
     }
 
     public function save()
@@ -61,7 +61,7 @@ class Kategori extends BaseController
             'kategori' => $this->kategoriModel->find($id),
             'validasi' => \Config\Services::validation()
         ];
-        return json_encode($data);
+        return view('kategori/edit', $data);
     }
 
     public function update($id)
