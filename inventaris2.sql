@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 16, 2021 at 07:49 PM
+-- Generation Time: Nov 16, 2021 at 08:34 PM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.0.12
 
@@ -43,7 +43,7 @@ CREATE TABLE `barang` (
 --
 
 INSERT INTO `barang` (`id_barang`, `id_kategori`, `nama_barang`, `jml_barang`, `tgl_perolehan`, `harga`, `foto`, `deskripsi`) VALUES
-(1, 1, 'Sapu Ajaib', 2, '2021-11-16', 9000000, '1637072677_0892868bae602a636c89.jpg', 'Sapu ajaib biasa');
+(2, 1, 'Sapu Ajaib', 120, '2021-11-17', 1230000, '1637090853_b1fca1b7f9744979995b.jpg', 'Bukan sapu biasa');
 
 -- --------------------------------------------------------
 
@@ -75,8 +75,15 @@ CREATE TABLE `peminjam` (
   `nama_peminjam` varchar(255) NOT NULL,
   `nama_instansi` varchar(255) NOT NULL,
   `no_hp` varchar(255) NOT NULL,
-  `status` enum('pending','disetujui','ditolak','') NOT NULL
+  `status` enum('pending','disetujui','ditolak') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `peminjam`
+--
+
+INSERT INTO `peminjam` (`id_peminjam`, `id_user`, `nama_peminjam`, `nama_instansi`, `no_hp`, `status`) VALUES
+(1, 1, 'Siti Napi\'ah', 'ULM', '08969876234', 'pending');
 
 -- --------------------------------------------------------
 
@@ -92,9 +99,9 @@ CREATE TABLE `peminjaman_barang` (
   `tgl_pinjam` date NOT NULL,
   `tgl_kembali` date NOT NULL,
   `tgl_permohonan` date NOT NULL,
-  `tgl_selesai` date NOT NULL,
+  `tgl_selesai` date DEFAULT NULL,
   `keperluan` varchar(255) NOT NULL,
-  `status` enum('pending','dipinjam','selesai','') NOT NULL,
+  `status` enum('pending','dipinjam','selesai','batal') NOT NULL,
   `surat_peminjaman` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -111,8 +118,9 @@ CREATE TABLE `peminjaman_ruang` (
   `tgl_pinjam` date NOT NULL,
   `tgl_kembali` date NOT NULL,
   `tgl_permohonan` date NOT NULL,
+  `tgl_selesai` date DEFAULT NULL,
   `keperluan` varchar(255) NOT NULL,
-  `status` enum('pending','dipinjam','selesai','') NOT NULL,
+  `status` enum('pending','dipinjam','selesai','batal') NOT NULL,
   `surat_peminjaman` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -142,8 +150,15 @@ CREATE TABLE `user` (
   `email` varchar(255) NOT NULL,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `role` enum('user','admin','','') NOT NULL
+  `role` enum('user','admin') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`id_user`, `nama_lengkap`, `email`, `username`, `password`, `role`) VALUES
+(1, 'Siti Napi\'ah', 'sitinapiah06@gmail.com', 'sitina123', '7e84c6c018e135ece8a538d95ab368e72252143a', 'admin');
 
 --
 -- Indexes for dumped tables
@@ -205,7 +220,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `barang`
 --
 ALTER TABLE `barang`
-  MODIFY `id_barang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_barang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `kategori`
@@ -217,13 +232,13 @@ ALTER TABLE `kategori`
 -- AUTO_INCREMENT for table `peminjam`
 --
 ALTER TABLE `peminjam`
-  MODIFY `id_peminjam` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_peminjam` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `peminjaman_barang`
 --
 ALTER TABLE `peminjaman_barang`
-  MODIFY `id_peminjaman` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_peminjaman` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `peminjaman_ruang`
@@ -241,7 +256,7 @@ ALTER TABLE `ruangan`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables

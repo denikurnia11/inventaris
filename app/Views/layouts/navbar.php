@@ -45,6 +45,17 @@
           </ul>
         </li>
         <li>
+          <a href="#"><i class="fa fa-comment fa-fw"></i> Request Peminjaman<span class="fa arrow"></span></a>
+          <ul class="nav nav-second-level">
+            <li>
+              <a href="<?= base_url('admin/laporan'); ?>"><i class="fa fa-desktop fa-fw"></i> Data Barang</a>
+            </li>
+            <li>
+              <a href="<?= base_url('admin/laporan'); ?>"><i class="fa fa-archive fa-fw"></i> Data Ruangan</a>
+            </li>
+          </ul>
+        </li>
+        <li>
           <a href="#"><i class="fa fa-book fa-fw"></i> Daftar Peminjaman<span class="fa arrow"></span></a>
           <ul class="nav nav-second-level">
             <li>
