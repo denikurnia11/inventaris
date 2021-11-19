@@ -164,7 +164,7 @@ class Barang extends BaseController
             ],
         ])) {
             // Redirect
-            return redirect()->to(base_url() . '/admin/barang/edit' . $id)->withInput();
+            return redirect()->to(base_url() . '/admin/barang/edit/' . $id)->withInput();
         }
 
         // Mengambil foto baru

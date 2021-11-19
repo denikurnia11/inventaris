@@ -18,12 +18,16 @@
         Masukkan Data Barang
       </div>
       <div class="panel-body">
-        <form method="POST" action="<?= base_url('admin/barang/update') ?>" enctype="multipart/form-data" class="form-horizontal">
+        <form method="POST" action="<?= base_url('admin/barang/update/' . $barang['id_barang']) ?>" enctype="multipart/form-data" class="form-horizontal">
           <div class="form-group">
             <label class="col-sm-2 text-left" for="nama_barang">Nama Barang</label>
             <div class="col-sm-10">
-              <input type="text" id="nama_barang" name="nama_barang" class="form-control" placeholder="Nama Barang" value="<?= $barang['nama_barang'] ?>">
+              <input type="text" id="nama_barang" name="nama_barang" class="form-control <?= ($validasi->hasError('nama_barang')) ? 'is-invalid' : ''; ?>" placeholder="Nama Barang" value="<?= $barang['nama_barang'] ?>">
+              <div class="invalid-feedback">
+                <?= $validasi->getError('nama_barang'); ?>
+              </div>
             </div>
+
           </div>
 
           <div class="form-group">
