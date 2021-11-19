@@ -21,8 +21,12 @@ class PeminjamanRuangModel extends Model
         'surat_peminjaman'
     ];
 
-    public function getData()
+    public function getData($id = null)
     {
-        return $this->join('peminjam', 'peminjam.id_peminjam=peminjaman_ruang.id_peminjam')->join('ruangan', 'ruangan.id_ruangan=peminjaman_ruangan.id_ruangan')->findAll();
+        if (!$id) {
+            return $this->join('peminjam', 'peminjam.id_peminjam=peminjaman_ruang.id_peminjam')->join('ruangan', 'ruangan.id_ruangan=peminjaman_ruangan.id_ruangan')->findAll();
+        } else {
+            return $this->join('peminjam', 'peminjam.id_peminjam=peminjaman_ruang.id_peminjam')->join('ruangan', 'ruangan.id_ruangan=peminjaman_ruangan.id_ruangan')->where('')->findAll();
+        }
     }
 }

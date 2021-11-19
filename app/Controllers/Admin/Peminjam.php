@@ -77,8 +77,8 @@ class Peminjam extends BaseController
             'id_user'       => $this->request->getVar('id_user'),
             'nama_peminjam' => $this->request->getVar('nama_peminjam'),
             'nama_instansi' => $this->request->getVar('nama_instansi'),
-            'no_hp'          => $this->request->getVar('no_hp'),
-            'status'          => $this->request->getVar('no_hp'),
+            'no_hp'         => $this->request->getVar('no_hp'),
+            'status'        => $this->request->getVar('status'),
         ]);
 
         session()->setFlashdata('pesan', 'Data berhasil ditambahkan.');
@@ -140,7 +140,7 @@ class Peminjam extends BaseController
             'nama_peminjam' => $this->request->getVar('nama_peminjam'),
             'nama_instansi' => $this->request->getVar('nama_instansi'),
             'no_hp'         => $this->request->getVar('no_hp'),
-            'status'        => $this->request->getVar('no_hp'),
+            'status'        => $this->request->getVar('status'),
         ]);
 
         session()->setFlashdata('pesan', 'Data berhasil diubah.');

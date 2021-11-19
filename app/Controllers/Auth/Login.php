@@ -43,6 +43,7 @@ class Login extends BaseController
         } else {
             // Jika benar, arahkan user masuk ke aplikasi 
             $sessLogin = [
+                'idUser' => $dataUser['id_user'],
                 'nama' => $dataUser['nama_lengkap'],
                 'username' => $dataUser['username'],
                 'email' => $dataUser['email'],
