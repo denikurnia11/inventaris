@@ -39,6 +39,12 @@ class Barang extends BaseController
         // dd($this->request->getVar());
         //Validasi
         if (!$this->validate([
+            'id_kategori' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Kategori barang harus diisi.'
+                ]
+            ],
             'nama_barang' => [
                 'rules'  => 'required',
                 'errors' => [
@@ -82,7 +88,7 @@ class Barang extends BaseController
             ],
         ])) {
             // Redirect
-            return redirect()->to(base_url() . '/admin/barang/tambah')->withInput();
+            return redirect()->back()->withInput();
         }
 
         // Mengambil foto
@@ -93,9 +99,9 @@ class Barang extends BaseController
         $fileFoto->move('files/barang', $namaFoto);
 
         $this->barangModel->save([
-            'id_kategori'   => 1,
+            'id_kategori'   => $this->request->getVar('id_kategori'),
             'nama_barang'   => $this->request->getVar('nama_barang'),
-            'jml_barang'       => $this->request->getVar('jml_barang'),
+            'jml_barang'    => $this->request->getVar('jml_barang'),
             'deskripsi'     => $this->request->getVar('deskripsi'),
             'foto'          => $namaFoto,
             'tgl_perolehan' => $this->request->getVar('tgl_perolehan'),
@@ -121,6 +127,12 @@ class Barang extends BaseController
     {
         //Validasi
         if (!$this->validate([
+            'id_kategori' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Kategori barang harus diisi.'
+                ]
+            ],
             'nama_barang' => [
                 'rules'  => 'required',
                 'errors' => [
@@ -141,7 +153,7 @@ class Barang extends BaseController
                 ]
             ],
             'foto' => [
-                'rules' => 'uploaded[foto]|is_image[foto]|mime_in[foto,image/jpg,image/jpeg,image/png]|max_size[foto,1024]',
+                'rules' => 'is_image[foto]|mime_in[foto,image/jpg,image/jpeg,image/png]|max_size[foto,1024]',
                 'errors' => [
                     'uploaded' => 'Foto harus diisi.',
                     'is_image' => 'File harus berupa gambar',
@@ -186,7 +198,7 @@ class Barang extends BaseController
         $this->barangModel->update($id, [
             'id_kategori'   => $this->request->getVar('id_kategori'),
             'nama_barang'   => $this->request->getVar('nama_barang'),
-            'jml_barang'       => $this->request->getVar('jml_barang'),
+            'jml_barang'    => $this->request->getVar('jml_barang'),
             'deskripsi'     => $this->request->getVar('deskripsi'),
             'foto'          => $namaFoto,
             'tgl_perolehan' => $this->request->getVar('tgl_perolehan'),

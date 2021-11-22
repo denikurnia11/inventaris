@@ -18,11 +18,14 @@
         Masukkan Data Kategori
       </div>
       <div class="panel-body">
-        <form method="POST" action="<?= base_url('admin/kategori/update') ?>" enctype="multipart/form-data" class="form-horizontal">
+        <form method="POST" action="<?= base_url('admin/kategori/update/' . $kategori['id_kategori']) ?>" enctype="multipart/form-data" class="form-horizontal">
           <div class="form-group">
             <label class="col-sm-2 text-left" for="nama_kategori">Nama Kategori</label>
             <div class="col-sm-10">
-              <input value="<?= $kategori['nama_kategori'] ?>" type="text" id="nama_kategori" name="nama_kategori" class="form-control" placeholder="Nama Kategori">
+              <input type="text" id="nama_kategori" name="nama_kategori" value="<?= $kategori['nama_kategori'] ?>" class="form-control <?= ($validasi->hasError('nama_kategori')) ? 'is-invalid' : '' ?>" placeholder="Nama Kategori">
+              <div class="invalid-feedback">
+                <?= $validasi->getError('nama_kategori') ?>
+              </div>
             </div>
           </div>
 
@@ -30,7 +33,7 @@
             <a href="<?= base_url('admin/kategori') ?>">
               <button type="button" class="btn btn-danger btn-sm" style="margin-right: 1rem;">Kembali</button>
             </a>
-            <button type="submit" class="btn btn-success btn-sm">Simpan</button>
+            <button type="submit" class="btn btn-success btn-sm">Edit</button>
           </div>
         </form>
       </div>

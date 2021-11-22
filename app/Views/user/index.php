@@ -11,6 +11,10 @@
   </div>
 </div>
 
+<?php if (session()->getFlashData('pesan')) : ?>
+  <div class="alert alert-success" role="alert"><?= session()->getFlashData('pesan') ?></div>
+<?php endif; ?>
+
 <div class="row">
   <div class="col-lg-12">
     <div class="panel panel-default">
@@ -41,11 +45,6 @@
                 <td><?= $row['email'] ?></td>
                 <td><?= $row['role'] ?></td>
                 <td class="text-center">
-                  <a href="<?= base_url('admin/user/edit/' . $row['id_user']) ?>" style="text-decoration: none !important;">
-                    <button class="btn btn-success btn-xs">
-                      Edit
-                    </button>
-                  </a>
                   <button class="btn btn-danger btn-xs hapus" kode="<?= $row['id_user'] ?>" name="<?= $row['username'] ?>">Hapus</button>
                 </td>
               </tr>

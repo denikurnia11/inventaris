@@ -11,6 +11,10 @@
   </div>
 </div>
 
+<?php if (session()->getFlashData('pesan')) : ?>
+  <div class="alert alert-success" role="alert"><?= session()->getFlashData('pesan') ?></div>
+<?php endif; ?>
+
 <div class="row">
   <div class="col-lg-12">
     <div class="panel panel-default">

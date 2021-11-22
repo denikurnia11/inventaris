@@ -22,21 +22,25 @@
           <div class="form-group">
             <label class="col-sm-2 text-left" for="nama_ruangan">Nama Ruangan</label>
             <div class="col-sm-10">
-              <input type="text" id="nama_ruangan" name="nama_ruangan" class="form-control" placeholder="Nama Ruangan">
+              <input type="text" id="nama_ruangan" name="nama_ruangan" class="form-control <?= ($validasi->hasError('nama_ruangan')) ? 'is-invalid' : '' ?>" value="<?= old('nama_ruangan') ?>" placeholder="Nama Ruangan">
+              <div class="invalid-feedback">
+                <?= $validasi->getError('nama_ruangan') ?>
+              </div>
             </div>
           </div>
 
           <div class="form-group">
             <label for="kapasitas" class="col-sm-2 text-left">Kapasitas</label>
             <div class="col-sm-10">
-              <input type="number" name="kapasitas" class="form-control" placeholder="Kapasitas" min="0">
+              <input type="number" name="kapasitas" class="form-control  <?= ($validasi->hasError('kapasitas')) ? 'is-invalid' : '' ?>" value="<?= old('kapasitas') ?>" placeholder="Kapasitas" min="0">
+              <?= $validasi->getError('kapasitas') ?>
             </div>
           </div>
 
           <div class="form-group">
-            <label for="deskripsi" class="col-sm-2 text-left">Deskripsi</label>
+            <label for="deskripsi" class="col-sm-2 text-left ">Deskripsi</label>
             <div class="col-sm-10">
-              <textarea name="deskripsi" id="deskripsi" class="form-control" placeholder="Deskripsi"></textarea>
+              <textarea name="deskripsi" id="deskripsi" class="form-control <?= ($validasi->hasError('kapasitas')) ? 'is-invalid' : '' ?>" placeholder="Deskripsi"><?= old('deskripsi') ?></textarea>
             </div>
           </div>
 

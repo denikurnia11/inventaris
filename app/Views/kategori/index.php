@@ -11,6 +11,10 @@
   </div>
 </div>
 
+<?php if (session()->getFlashData('pesan')) : ?>
+  <div class="alert alert-success" role="alert"><?= session()->getFlashData('pesan') ?></div>
+<?php endif; ?>
+
 <div class="row">
   <div class="col-lg-12">
     <div class="panel panel-default">
@@ -82,13 +86,13 @@
 
   $("#konfirmasi").click(() => {
     $.ajax({
-      url: `<?= base_url('admin/barang/hapus') ?>/${$("#idhapus").val()}`,
+      url: `<?= base_url('admin/kategori/hapus') ?>/${$("#idhapus").val()}`,
       type: "GET",
       error: (err) => {
         console.log(err)
       },
       success: (html) => {
-        location.href = "<?= base_url('admin/barang') ?>"
+        location.href = "<?= base_url('admin/kategori') ?>"
       }
     });
   });

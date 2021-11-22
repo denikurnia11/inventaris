@@ -22,7 +22,10 @@
           <div class="form-group">
             <label class="col-sm-2 text-left" for="nama_kategori">Nama Kategori</label>
             <div class="col-sm-10">
-              <input type="text" id="nama_kategori" name="nama_kategori" class="form-control" placeholder="Nama Kategori">
+              <input type="text" id="nama_kategori" name="nama_kategori" value="<?= old('nama_kategori') ?>" class="form-control <?= ($validasi->hasError('nama_kategori')) ? 'is-invalid' : '' ?>" placeholder="Nama Kategori">
+              <div class="invalid-feedback">
+                <?= $validasi->getError('nama_kategori') ?>
+              </div>
             </div>
           </div>
 
