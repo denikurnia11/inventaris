@@ -16,13 +16,33 @@ class Login extends BaseController
     public function index()
     {
         $data = [
-            'title'   => 'Form Login'
+            'title'   => 'Form Login',
+            'validasi' => \Config\Services::validation()
         ];
-        return json_encode($data);
+        return view('auth/login', $data);
     }
 
     public function cek()
     {
+        if (!$this->validate([
+            'username' => [
+                'rules'  => 'required|is_unique[user.username]',
+                'errors' => [
+                    'required' => 'Username harus diisi.',
+                ]
+            ],
+            'password' => [
+                'rules'  => 'required|min_length[4]',
+                'errors' => [
+                    'required'   => 'Password harus diisi.',
+                    'min_length' => 'Minimal 4 karakter.',
+                ]
+            ],
+        ])) {
+            // Redirect
+            return redirect()->back()->withInput();
+        }
+
         // Ambil data dari form
         $data = $this->request->getVar();
         // Ambil data user di database yang emailnya sama 

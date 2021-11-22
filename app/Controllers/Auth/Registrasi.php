@@ -19,7 +19,7 @@ class Registrasi extends BaseController
             'title'   => 'Form Registrasi',
             'validasi' => \Config\Services::validation()
         ];
-        return json_encode($data);
+        return view('auth/daftar', $data);
     }
 
     public function create()
@@ -57,14 +57,14 @@ class Registrasi extends BaseController
             'cpassword' => [
                 'rules'  => 'required|matches[password]',
                 'errors' => [
-                    'required'   => 'Confirm Password harus diisi.',
-                    'matches' => 'Confirm Password tidak valid.',
+                    'required'   => 'Konfirmasi Password harus diisi.',
+                    'matches' => 'Konfirmasi Password tidak valid.',
                 ]
             ],
 
         ])) {
             // Redirect
-            return redirect()->to(base_url() . '/auth/registrasi')->withInput();
+            return redirect()->back()->withInput();
         }
 
         $this->userModel->save([

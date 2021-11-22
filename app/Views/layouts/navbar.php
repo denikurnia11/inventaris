@@ -1,4 +1,4 @@
-<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0;">
   <div class="navbar-header">
     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
       <span class="sr-only">Toggle navigation</span>
@@ -6,7 +6,10 @@
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
-    <a class="navbar-brand" href="<?= base_url('dashboard'); ?>"><strong>SKB</strong></a>
+    <a class="navbar-brand" style="display: flex; align-items: center;" href="<?= base_url('/'); ?>">
+      <img src="<?= base_url('img/Logo SKB.PNG') ?>" width="25" height="25" alt="Logo SKB">
+      <strong>SKB</strong>
+    </a>
   </div>
   <ul class="nav navbar-top-links navbar-right">
     <li class="dropdown">

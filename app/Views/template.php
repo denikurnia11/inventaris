@@ -8,6 +8,8 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
+  <link rel="icon" href="<?= base_url('img/Logo SKB.PNG') ?>" type="image/png" />
+
   <title><?= $title ?></title>
 
   <!-- Bootstrap Core CSS -->
