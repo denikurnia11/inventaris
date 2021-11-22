@@ -5,6 +5,7 @@ namespace App\Controllers\Admin;
 use App\Controllers\BaseController;
 use App\Models\BarangModel;
 use App\Models\KategoriModel;
+use App\Models\PeminjamanBarangModel;
 
 class Barang extends BaseController
 {
@@ -219,5 +220,16 @@ class Barang extends BaseController
         $this->barangModel->delete($id);
         session()->setFlashdata('pesan', 'Data berhasil dihapus.');
         return redirect()->to(base_url() . '/admin/barang');
+    }
+
+    public function request()
+    {
+        $peminjaman = new PeminjamanBarangModel();
+        $data = [
+            'title'     => 'Request Peminjaman Barang',
+            'peminjaman' => $peminjaman->getData()
+        ];
+        
+        return json_encode($data);
     }
 }

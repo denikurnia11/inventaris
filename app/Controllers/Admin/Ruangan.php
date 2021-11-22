@@ -3,6 +3,7 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
+use App\Models\PeminjamanRuangModel;
 use App\Models\RuanganModel;
 
 class Ruangan extends BaseController
@@ -48,12 +49,6 @@ class Ruangan extends BaseController
                     'integer'  => 'Harus berupa angka.'
                 ]
             ],
-            'status' => [
-                'rules'  => 'required',
-                'errors' => [
-                    'required' => 'Status harus diisi.'
-                ]
-            ],
             'deskripsi' => [
                 'rules'  => 'required',
                 'errors' => [
@@ -68,8 +63,8 @@ class Ruangan extends BaseController
         $this->ruanganModel->save([
             'nama_ruangan' => $this->request->getVar('nama_ruangan'),
             'kapasitas'    => $this->request->getVar('kapasitas'),
-            'status'       => $this->request->getVar('status'),
             'deskripsi'    => $this->request->getVar('deskripsi'),
+            'status'       => 'tersedia',
         ]);
 
         session()->setFlashdata('pesan', 'Data berhasil ditambahkan.');
@@ -136,5 +131,25 @@ class Ruangan extends BaseController
         $this->ruanganModel->delete($id);
         session()->setFlashdata('pesan', 'Data berhasil dihapus.');
         return redirect()->to(base_url() . '/admin/ruangan');
+    }
+
+    public function request()
+    {
+        $peminjaman = new PeminjamanRuangModel();
+        $data = [
+            'title'     => 'Request Peminjaman Ruangan',
+            'peminjaman' => $peminjaman->getDataByStatus('pending')
+        ];
+        return view('ruangan/request', $data);
+    }
+
+    public function peminjaman()
+    {
+        $peminjaman = new PeminjamanRuangModel();
+        $data = [
+            'title'     => 'Daftar Peminjaman Ruangan',
+            'peminjaman' => $peminjaman->getDataByStatus('dipinjam')
+        ];
+        return view('ruangan/peminjaman', $data);
     }
 }

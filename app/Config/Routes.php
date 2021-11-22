@@ -34,6 +34,7 @@ $routes->setAutoRoute(true);
 $routes->get('/', 'Auth/Login::index');
 $routes->get('/login', 'Auth/Login::index');
 $routes->get('/daftar', 'Auth/Registrasi::index');
+$routes->get('/logout', 'Auth/Login::logout');
 
 /*
  * --------------------------------------------------------------------

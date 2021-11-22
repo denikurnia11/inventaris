@@ -24,9 +24,19 @@ class PeminjamanRuangModel extends Model
     public function getData($id = null)
     {
         if (!$id) {
-            return $this->join('peminjam', 'peminjam.id_peminjam=peminjaman_ruang.id_peminjam')->join('ruangan', 'ruangan.id_ruangan=peminjaman_ruangan.id_ruangan')->findAll();
+            return $this->join('peminjam', 'peminjam.id_peminjam=peminjaman_ruang.id_peminjam')->join('ruangan', 'ruangan.id_ruangan=peminjaman_ruang.id_ruangan')->findAll();
         } else {
-            return $this->join('peminjam', 'peminjam.id_peminjam=peminjaman_ruang.id_peminjam')->join('ruangan', 'ruangan.id_ruangan=peminjaman_ruangan.id_ruangan')->where('')->findAll();
+            return $this->join('peminjam', 'peminjam.id_peminjam=peminjaman_ruang.id_peminjam')->join('ruangan', 'ruangan.id_ruangan=peminjaman_ruang.id_ruangan')->where('')->findAll();
         }
+    }
+
+    public function getDataByStatus($status = 'pending')
+    {
+        return $this->join('peminjam', 'peminjam.id_peminjam=peminjaman_ruang.id_peminjam')->join('ruangan', 'ruangan.id_ruangan=peminjaman_ruang.id_ruangan')->where('peminjam.status', $status)->findAll();
+    }
+
+    public function getDataByStatusExcept($status = 'pending')
+    {
+        return $this->join('peminjam', 'peminjam.id_peminjam=peminjaman_ruang.id_peminjam')->join('ruangan', 'ruangan.id_ruangan=peminjaman_ruang.id_ruangan')->where('peminjam.status !=', $status)->findAll();
     }
 }

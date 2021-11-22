@@ -1,3 +1,16 @@
+<?php
+function badge($status)
+{
+  switch ($status) {
+    case 'tersedia':
+      # code...
+      return 'badge badge-success';
+    default:
+      return 'badge badge-danger';
+  }
+}
+?>
+
 <?= $this->extend('template') ?>
 
 <?= $this->section('content') ?>
@@ -30,6 +43,7 @@
               <td>Nama Ruangan</td>
               <td>Kapasitas</td>
               <td>Deskripsi</td>
+              <td>Status</td>
               <td>Aksi</td>
             </tr>
           </thead>
@@ -42,6 +56,11 @@
                 <td><?= $row['nama_ruangan'] ?></td>
                 <td><?= $row['kapasitas'] ?></td>
                 <td><?= $row['deskripsi'] ?></td>
+                <td class="text-center" style="text-transform: capitalize;">
+                  <div class="<?= badge($row['status']) ?>">
+                    <?= $row['status'] ?>
+                  </div>
+                </td>
                 <td class="text-center">
                   <a href="<?= base_url('admin/ruangan/edit/' . $row['id_ruangan']) ?>" style="text-decoration: none !important;">
                     <button class="btn btn-success btn-xs">

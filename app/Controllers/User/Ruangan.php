@@ -21,17 +21,23 @@ class Ruangan extends BaseController
             'title'   => 'Data Ruangan',
             'ruangan' => $this->ruanganModel->findAll()
         ];
-        return json_encode($data);
+        return view('ruangan/index_user', $data);
     }
 
     public function pinjam($idRuangan)
     {
+        $ruangan = $this->ruanganModel->find($idRuangan);
+
+        if ($ruangan['status'] != 'tersedia') {
+            return redirect()->to(base_url('user/ruangan'));
+        }
+
         $data = [
             'title' => 'Form Peminjaman Ruangan',
             'ruangan' => $this->ruanganModel->find($idRuangan),
             'validasi' => \Config\Services::validation()
         ];
-        return json_encode($data);
+        return view('ruangan/pinjam', $data);
     }
 
     public function save($idRuangan)

@@ -36,7 +36,7 @@
       </button>
       <a class="navbar-brand" style="display: flex; align-items: center;" href="<?= base_url('/'); ?>">
         <img src="<?= base_url('img/Logo SKB.PNG') ?>" width="25" height="25" alt="Logo SKB">
-        <strong>SKB</strong>
+        <strong class="ml-2">SKB</strong>
       </a>
     </div>
     <ul class="nav navbar-top-links navbar-right">

@@ -8,7 +8,7 @@
     </button>
     <a class="navbar-brand" style="display: flex; align-items: center;" href="<?= base_url('/'); ?>">
       <img src="<?= base_url('img/Logo SKB.PNG') ?>" width="25" height="25" alt="Logo SKB">
-      <strong>SKB</strong>
+      <strong class="ml-2">SKB</strong>
     </a>
   </div>
   <ul class="nav navbar-top-links navbar-right">
@@ -19,7 +19,7 @@
         <i class="fa fa-caret-down"></i>
       </a>
       <ul class="dropdown-menu dropdown-user">
-        <li><a href="<?= base_url('login/logout') ?>"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+        <li><a href="<?= base_url('logout') ?>"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
         </li>
       </ul>
     </li>
@@ -54,7 +54,7 @@
               <a href="<?= base_url('admin/laporan'); ?>"><i class="fa fa-desktop fa-fw"></i> Data Barang</a>
             </li>
             <li>
-              <a href="<?= base_url('admin/laporan'); ?>"><i class="fa fa-archive fa-fw"></i> Data Ruangan</a>
+              <a href="<?= base_url('admin/ruangan/request'); ?>"><i class="fa fa-archive fa-fw"></i> Data Ruangan</a>
             </li>
           </ul>
         </li>
@@ -65,7 +65,7 @@
               <a href="<?= base_url('admin/laporan'); ?>"><i class="fa fa-desktop fa-fw"></i> Data Barang</a>
             </li>
             <li>
-              <a href="<?= base_url('admin/laporan'); ?>"><i class="fa fa-archive fa-fw"></i> Data Ruangan</a>
+              <a href="<?= base_url('admin/ruangan/peminjaman'); ?>"><i class="fa fa-archive fa-fw"></i> Data Ruangan</a>
             </li>
           </ul>
         </li>
@@ -81,7 +81,7 @@
           </ul>
         </li>
         <li>
-          <a href="<?= base_url('login/logout') ?>"><i class="fa fa-power-off fa-fw"></i> Logout</a>
+          <a href="<?= base_url('logout') ?>"><i class="fa fa-power-off fa-fw"></i> Logout</a>
         </li>
       </ul>
     </div>

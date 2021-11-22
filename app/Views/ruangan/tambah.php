@@ -33,7 +33,9 @@
             <label for="kapasitas" class="col-sm-2 text-left">Kapasitas</label>
             <div class="col-sm-10">
               <input type="number" name="kapasitas" class="form-control  <?= ($validasi->hasError('kapasitas')) ? 'is-invalid' : '' ?>" value="<?= old('kapasitas') ?>" placeholder="Kapasitas" min="0">
-              <?= $validasi->getError('kapasitas') ?>
+              <div class="invalid-feedback">
+                <?= $validasi->getError('kapasitas') ?>
+              </div>
             </div>
           </div>
 
@@ -41,6 +43,9 @@
             <label for="deskripsi" class="col-sm-2 text-left ">Deskripsi</label>
             <div class="col-sm-10">
               <textarea name="deskripsi" id="deskripsi" class="form-control <?= ($validasi->hasError('kapasitas')) ? 'is-invalid' : '' ?>" placeholder="Deskripsi"><?= old('deskripsi') ?></textarea>
+              <div class="invalid-feedback">
+                <?= $validasi->getError('nama_ruangan') ?>
+              </div>
             </div>
           </div>
 
