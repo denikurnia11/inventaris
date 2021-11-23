@@ -57,6 +57,12 @@
     <div class="row mt-md-5" style="display: flex; justify-content: center; align-items: center; padding: 4rem 0;">
       <div class="col-xs-12 col-md-6 text-center" style="margin: auto;">
         <h1 class="mb-5">Login</h1>
+        <!-- FlashData -->
+        <?php if (session()->getFlashdata('pesan')) : ?>
+          <div class="alert alert-success text-start d-flex justify-content-between align-items-center" role="alert">
+            <?= session()->getFlashdata('pesan'); ?>
+          </div>
+        <?php endif; ?>
         <form action="<?= base_url('auth/login/cek') ?>" method="POST" class="my-4">
           <div class="form-group mb-4 text-left">
             <input type="text" name="username" id="username" placeholder="Username" value="<?= old('username') ?>" class="form-control <?= ($validasi->hasError('username')) ? 'is-invalid' : '' ?>">

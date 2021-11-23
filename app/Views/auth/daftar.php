@@ -83,12 +83,12 @@
             </div>
           </div>
           <div class="form-group mb-4 text-left">
-            <input type="password" name="cpassword" id="cpassword" placeholder="Konfirmasi Password" value="<?= old('cpassword') ?>" class="form-control <?= ($validasi->hasError('password')) ? 'is-invalid' : '' ?>">
+            <input type="password" name="cpassword" id="cpassword" placeholder="Konfirmasi Password" value="<?= old('cpassword') ?>" class="form-control <?= ($validasi->hasError('cpassword')) ? 'is-invalid' : '' ?>">
             <div class="invalid-feedback">
               <?= $validasi->getError('cpassword'); ?>
             </div>
           </div>
-          <button class="btn btn-primary">Daftar</button>
+          <button type="submit" class="btn btn-primary">Daftar</button>
           <p class="mt-5">Sudah punya akun? <a href="<?= base_url('login') ?>">Login</a></p>
         </form>
       </div>
