@@ -76,7 +76,7 @@
               <?= $validasi->getError('password'); ?>
             </div>
           </div>
-          <button class="btn btn-primary">Login</button>
+          <button type="submit" class="btn btn-primary">Login</button>
           <p class="mt-5">Belum punya akun? <a href="<?= base_url('daftar') ?>">Daftar</a></p>
         </form>
       </div>
