@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers\Admin\Ruang;
+namespace App\Controllers\Admin\Peminjaman;
 
 use App\Controllers\BaseController;
 use App\Models\PeminjamanRuangModel;
@@ -244,5 +244,44 @@ class Ruangan extends BaseController
     $this->peminjamanRuangModel->delete($id);
     session()->setFlashdata('pesan', 'Data berhasil dihapus.');
     return redirect()->to(base_url() . '/admin/peminjamanruang');
+  }
+
+  public function changeStatus($id)
+  {
+    $data = $this->peminjamanRuangModel->find($id);
+    $ruangan = $this->ruanganModel->find($data['id_ruangan']);
+    $status = $this->request->getVar('status');
+    switch ($status) {
+      case 'setuju':
+        if ($data['status'] != 'pending') return json_encode(['status' => 'error']);
+        if ($ruangan['status'] == 'tidak tersedia') return json_encode(['status' => 'Ruangan tidak tersedia']);
+        // Mengganti status ruangan
+        $this->ruanganModel->changeStatus($data['id_ruangan'], 'tidak tersedia');
+        // Mengganti status di tabel peminjaman
+        $this->peminjamanRuangModel->changeStatus($id, 'dipinjam');
+        // Menggati status di tabel peminjam
+        $this->peminjamModel->changeStatus($data['id_peminjam'], 'disetujui');
+        return json_encode(['status' => 'success']);
+      case 'tolak':
+        if ($data['status'] != 'pending') return json_encode(['status' => 'error']);
+        // Mengganti status di tabel peminjaman
+        $this->peminjamanRuangModel->changeStatus($id, 'batal');
+        // Menggati status di tabel peminjam
+        $this->peminjamModel->changeStatus($data['id_peminjam'], 'ditolak');
+        return json_encode(['status' => 'success']);
+      case 'kembali':
+        if ($data['status'] != 'dipinjam') return json_encode(['status' => 'error']);
+        // Mengganti status ruangan
+        $this->ruanganModel->changeStatus($data['id_ruangan'], 'tersedia');
+        // Mengganti status di tabel peminjaman
+        $this->peminjamanRuangModel->changeStatus($id, 'selesai');
+        // Menggati status di tabel peminjam
+        $this->peminjamModel->changeStatus($data['id_peminjam'], 'disetujui');
+        return json_encode(['status' => 'success']);
+
+      default:
+        # code...
+        break;
+    }
   }
 }

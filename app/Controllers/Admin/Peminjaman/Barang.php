@@ -9,7 +9,7 @@ use App\Models\PeminjamModel;
 
 class Barang extends BaseController
 {
-  protected $peminjamModel, $peminjamanBarangModel;
+  protected $peminjamModel, $peminjamanBarangModel, $barangModel;
   public function __construct()
   {
     $this->peminjamModel = new PeminjamModel();
@@ -258,5 +258,44 @@ class Barang extends BaseController
     $this->peminjamanBarangModel->delete($id);
     session()->setFlashdata('pesan', 'Data berhasil dihapus.');
     return redirect()->to(base_url() . '/admin/peminjamanbarang');
+  }
+
+  public function changeStatus($id)
+  {
+    $data = $this->peminjamanBarangModel->find($id);
+    $barang = $this->barangModel->find($data['id_barang']);
+    $status = $this->request->getVar('status');
+    switch ($status) {
+      case 'setuju':
+        if ($data['status'] != 'pending') return json_encode(['status' => 'error']);
+        if ($barang['jml_barang'] < $data['jml_barang']) return json_encode(['status' => 'barang tidak cukup']);
+        // Mengurangi jml barang
+        $this->barangModel->totalBarang($barang['id_barang'], $barang['jml_barang'] - $data['jml_barang']);
+        // Mengganti status di tabel peminjaman
+        $this->peminjamanBarangModel->changeStatus($id, 'dipinjam');
+        // Menggati status di tabel peminjam
+        $this->peminjamModel->changeStatus($data['id_peminjam'], 'disetujui');
+        return json_encode(['status' => 'success']);
+      case 'tolak':
+        if ($data['status'] != 'pending') return json_encode(['status' => 'error']);
+        // Mengganti status di tabel peminjaman
+        $this->peminjamanBarangModel->changeStatus($id, 'batal');
+        // Menggati status di tabel peminjam
+        $this->peminjamModel->changeStatus($data['id_peminjam'], 'ditolak');
+        return json_encode(['status' => 'success']);
+      case 'kembali':
+        if ($data['status'] != 'dipinjam') return json_encode(['status' => 'error']);
+        // Menambah jml barang
+        $this->barangModel->totalBarang($barang['id_barang'], $barang['jml_barang'] + $data['jml_barang']);
+        // Mengganti status di tabel peminjaman
+        $this->peminjamanBarangModel->changeStatus($id, 'selesai');
+        // Menggati status di tabel peminjam
+        $this->peminjamModel->changeStatus($data['id_peminjam'], 'disetujui');
+        return json_encode(['status' => 'success']);
+
+      default:
+        # code...
+        break;
+    }
   }
 }

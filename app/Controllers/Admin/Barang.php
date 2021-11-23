@@ -9,11 +9,12 @@ use App\Models\PeminjamanBarangModel;
 
 class Barang extends BaseController
 {
-    protected $barangModel, $kategoriModel;
+    protected $barangModel, $kategoriModel, $peminjamanBarangModel;
     public function __construct()
     {
         $this->barangModel = new BarangModel();
         $this->kategoriModel = new KategoriModel();
+        $this->peminjamanBarangModel = new PeminjamanBarangModel();
     }
 
     public function index()
@@ -229,7 +230,19 @@ class Barang extends BaseController
             'title'     => 'Request Peminjaman Barang',
             'peminjaman' => $peminjaman->getData()
         ];
-        
+
         return json_encode($data);
+    }
+
+    public function laporan()
+    {
+        // Get tanggal awal
+        $tglAwal = $this->request->getVar('tgl_awal');
+        $tglAkhir = $this->request->getVar('tgl_akhir');
+        $data = [
+            'title'     => 'Laporan Peminjaman Barang',
+            'peminjaman' => $this->peminjamanBarangModel->getLaporan($tglAwal, $tglAkhir)
+        ];
+        return view('barang/laporan', $data);
     }
 }

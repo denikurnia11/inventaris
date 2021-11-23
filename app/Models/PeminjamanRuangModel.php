@@ -30,6 +30,11 @@ class PeminjamanRuangModel extends Model
         }
     }
 
+    public function getLaporan($tglAwal = null, $tglAkhir = null)
+    {
+        return $this->where('tgl_permohonan =>', $tglAwal)->where('tgl_permohonan <=', $tglAkhir)->where('status !=', 'pending')->join('peminjam', 'peminjam.id_peminjam=peminjaman_ruang.id_peminjam')->join('ruangan', 'ruangan.id_ruangan=peminjaman_ruang.id_ruangan')->findAll();
+    }
+
     public function getDataByStatus($status = 'pending')
     {
         return $this->join('peminjam', 'peminjam.id_peminjam=peminjaman_ruang.id_peminjam')->join('ruangan', 'ruangan.id_ruangan=peminjaman_ruang.id_ruangan')->where('peminjam.status', $status)->findAll();
@@ -38,5 +43,11 @@ class PeminjamanRuangModel extends Model
     public function getDataByStatusExcept($status = 'pending')
     {
         return $this->join('peminjam', 'peminjam.id_peminjam=peminjaman_ruang.id_peminjam')->join('ruangan', 'ruangan.id_ruangan=peminjaman_ruang.id_ruangan')->where('peminjam.status !=', $status)->findAll();
+    }
+
+
+    public function changeStatus($id, $status)
+    {
+        $this->set('status', $status)->where('id_peminjaman', $id)->update();
     }
 }

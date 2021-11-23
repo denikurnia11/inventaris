@@ -23,8 +23,16 @@ class PeminjamanBarangModel extends Model
 
   public function getData()
   {
-    return $this->join('peminjam', 'peminjam.id_peminjam=peminjaman_barang.id_peminjam')
-      ->join('barang', 'barang.id_barang=peminjaman_barang.id_barang')
-      ->findAll();
+    return $this->join('peminjam', 'peminjam.id_peminjam=peminjaman_barang.id_peminjam')->join('barang', 'barang.id_barang=peminjaman_barang.id_barang')->findAll();
+  }
+
+  public function getLaporan($tglAwal = null, $tglAkhir = null)
+  {
+    return $this->where('tgl_permohonan =>', $tglAwal)->where('tgl_permohonan <=', $tglAkhir)->where('status !=', 'pending')->join('peminjam', 'peminjam.id_peminjam=peminjaman_barang.id_peminjam')->join('barang', 'barang.id_barang=peminjaman_barang.id_barang')->findAll();
+  }
+
+  public function changeStatus($id, $status)
+  {
+    $this->set('status', $status)->where('id_peminjaman', $id)->update();
   }
 }

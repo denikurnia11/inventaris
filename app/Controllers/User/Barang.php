@@ -106,6 +106,12 @@ class Barang extends BaseController
             // Redirect
             return redirect()->to(base_url() . '/user/barang/pinjam/' . $idBarang)->withInput();
         }
+        // Mencek jumlah barang
+        $barang = $this->barangModel->find($this->request->getVar('id_barang'));
+        if ($this->request->getVar('jml_barang') > $barang['jml_barang']) {
+            return json_encode(['status' => 'Barang tidak cukup.']);
+        }
+
         $this->peminjamModel->save([
             'id_user'       => session()->idUser,
             'nama_peminjam' => $this->request->getVar('nama_peminjam'),

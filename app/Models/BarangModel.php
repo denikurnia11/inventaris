@@ -14,4 +14,9 @@ class BarangModel extends Model
     {
         return $this->join('kategori', 'kategori.id_kategori=barang.id_kategori')->findAll();
     }
+
+    public function totalBarang($id, $jml)
+    {
+        $this->set('jml_barang', $jml)->where('id_barang', $id)->update();
+    }
 }

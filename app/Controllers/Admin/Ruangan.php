@@ -8,10 +8,11 @@ use App\Models\RuanganModel;
 
 class Ruangan extends BaseController
 {
-    protected $ruanganModel;
+    protected $ruanganModel, $peminjamanRuangModel;
     public function __construct()
     {
         $this->ruanganModel = new RuanganModel();
+        $this->peminjamanRuangModel = new PeminjamanRuangModel();
     }
 
     public function index()
@@ -145,11 +146,22 @@ class Ruangan extends BaseController
 
     public function peminjaman()
     {
-        $peminjaman = new PeminjamanRuangModel();
         $data = [
             'title'     => 'Daftar Peminjaman Ruangan',
-            'peminjaman' => $peminjaman->getDataByStatus('dipinjam')
+            'peminjaman' => $this->peminjamanRuangModel->getDataByStatus('dipinjam')
         ];
         return view('ruangan/peminjaman', $data);
+    }
+
+    public function laporan()
+    {
+        // Get tanggal awal
+        $tglAwal = $this->request->getVar('tgl_awal');
+        $tglAkhir = $this->request->getVar('tgl_akhir');
+        $data = [
+            'title'     => 'Laporan Peminjaman Ruangan',
+            'peminjaman' => $this->peminjamanRuangModel->getLaporan($tglAwal, $tglAkhir)
+        ];
+        return view('ruangan/laporan', $data);
     }
 }
