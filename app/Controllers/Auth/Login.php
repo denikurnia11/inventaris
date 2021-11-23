@@ -26,7 +26,7 @@ class Login extends BaseController
     {
         if (!$this->validate([
             'username' => [
-                'rules'  => 'required|is_unique[user.username]',
+                'rules'  => 'required',
                 'errors' => [
                     'required' => 'Username harus diisi.',
                 ]
@@ -45,12 +45,12 @@ class Login extends BaseController
 
         // Ambil data dari form
         $data = $this->request->getVar();
-        // Ambil data user di database yang emailnya sama 
-        $dataUser = $this->userModel->where('email', $data['email'])->first();
+        // Ambil data user di database yang usernamenya sama 
+        $dataUser = $this->userModel->where('username', $data['username'])->first();
 
         if (!$dataUser) {
-            // Jika Email tidak ditemukan, balikkan ke halaman login
-            session()->setFlashdata('pesan', 'Email tidak ditemukan');
+            // Jika Username tidak ditemukan, balikkan ke halaman login
+            session()->setFlashdata('pesan', 'Username tidak ditemukan');
             // Redirect ke login
             return redirect()->to('/');
         }
