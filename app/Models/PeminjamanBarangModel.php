@@ -28,11 +28,53 @@ class PeminjamanBarangModel extends Model
 
   public function getLaporan($tglAwal = null, $tglAkhir = null)
   {
-    return $this->where('tgl_permohonan =>', $tglAwal)->where('tgl_permohonan <=', $tglAkhir)->where('status !=', 'pending')->join('peminjam', 'peminjam.id_peminjam=peminjaman_barang.id_peminjam')->join('barang', 'barang.id_barang=peminjaman_barang.id_barang')->findAll();
+    return $this
+      ->select('id_peminjaman, nama_peminjam, nama_barang, peminjaman_barang.jml_barang, tgl_permohonan, tgl_pinjam, tgl_kembali, tgl_selesai, peminjaman_barang.status')
+      ->where('tgl_permohonan >=', $tglAwal ? $tglAwal : '0000-00-00')
+      ->where('tgl_permohonan <=', $tglAkhir ? $tglAkhir : '2222-00-00')
+      ->whereIn('peminjaman_barang.status', ['selesai', 'dipinjam', 'batal'])
+      ->join('barang', 'barang.id_barang=peminjaman_barang.id_barang')
+      ->join('peminjam', 'peminjam.id_peminjam=peminjaman_barang.id_peminjam')
+      ->findAll();
+  }
+
+  public function getDataByStatus($status = 'pending')
+  {
+    return $this
+      ->join('peminjam', 'peminjam.id_peminjam=peminjaman_barang.id_peminjam')
+      ->join('barang', 'barang.id_barang=peminjaman_barang.id_barang')
+      ->where('peminjaman_barang.status', $status)
+      ->findAll();
+  }
+
+  public function getDataByStatusExcept($status = 'pending')
+  {
+    return $this
+      ->join('peminjam', 'peminjam.id_peminjam=peminjaman_barang.id_peminjam')
+      ->join('barang', 'barang.id_barang=peminjaman_barang.id_barang')
+      ->where('peminjaman_barang.status !=', $status)
+      ->findAll();
   }
 
   public function changeStatus($id, $status)
   {
     $this->set('status', $status)->where('id_peminjaman', $id)->update();
+  }
+
+  public function getDataByID($id)
+  {
+    return $this
+      ->join('peminjam', 'peminjam.id_peminjam=peminjaman_barang.id_peminjam')
+      ->join('barang', 'barang.id_barang=peminjaman_barang.id_barang')
+      ->find($id);
+  }
+
+  public function getDataByUser($id)
+  {
+    return $this
+      ->join('peminjam', 'peminjam.id_peminjam=peminjaman_barang.id_peminjam')
+      ->join('barang', 'barang.id_barang=peminjaman_barang.id_barang')
+      ->where('peminjam.id_user', $id)
+      ->findAll();
   }
 }

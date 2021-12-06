@@ -17,233 +17,17 @@ class Ruangan extends BaseController
     $this->peminjamanRuangModel = new PeminjamanRuangModel();
   }
 
-  public function index()
+  public function cetak()
   {
+    // Get tanggal awal
+    $tglAwal = $this->request->getVar('tgl_awal');
+    $tglAkhir = $this->request->getVar('tgl_akhir');
     $data = [
-      'title'     => 'Data Peminjaman Ruangan',
-      'peminjaman' => $this->peminjamanRuangModel->getData()
+      'title'     => 'Cetak Laporan Peminjaman Ruangan',
+      'peminjaman' => $this->peminjamanRuangModel->getLaporan($tglAwal, $tglAkhir)
     ];
-    return json_encode($data);
-  }
 
-  public function tambah()
-  {
-    $data = [
-      'title'     => 'Form Peminjaman Barang',
-      'peminjam'  => $this->peminjamModel->findAll(), // Dropdown
-      'ruangan'   => $this->ruanganModel->findAll(), // Dropdown
-      'validasi'  => \Config\Services::validation()
-    ];
-    return json_encode($data);
-  }
-
-  public function save()
-  {
-    //Validasi
-    if (!$this->validate([
-      'id_peminjam' => [
-        'rules'  => 'required',
-        'errors' => [
-          'required' => 'Peminjam harus diisi.'
-        ]
-      ],
-      'id_ruangan' => [
-        'rules'  => 'required',
-        'errors' => [
-          'required' => 'Ruangan harus diisi.'
-        ]
-      ],
-      'tgl_pinjam' => [
-        'rules'  => 'required',
-        'errors' => [
-          'required' => 'Tanggal harus diisi.'
-        ]
-      ],
-      'tgl_kembali' => [
-        'rules'  => 'required',
-        'errors' => [
-          'required' => 'Tanggal harus diisi.'
-        ]
-      ],
-      'tgl_permohonan' => [
-        'rules'  => 'required',
-        'errors' => [
-          'required' => 'Tanggal harus diisi.'
-        ]
-      ],
-      'tgl_selesai' => [
-        'rules'  => 'required',
-        'errors' => [
-          'required' => 'Tanggal harus diisi.'
-        ]
-      ],
-      'keperluan' => [
-        'rules'  => 'required',
-        'errors' => [
-          'required' => 'Harga harus diisi.'
-        ]
-      ],
-      'status' => [
-        'rules'  => 'required',
-        'errors' => [
-          'required' => 'Status harus diisi.'
-        ]
-      ],
-      'surat_peminjaman' => [
-        'rules'  => 'uploaded[surat]|ext_in[surat,pdf,docx]|max_size[surat,1024]',
-        'errors' => [
-          'uploaded'   => 'File harus diisi.',
-          'ext_in'     => 'File harus berextensi pdf atau word',
-          'max_size'   => 'File maksimal 1mb.',
-        ]
-      ],
-    ])) {
-      // Redirect
-      return redirect()->to(base_url() . '/admin/peminjamanruang/tambah')->withInput();
-    }
-
-    // Mengambil surat
-    $fileSurat = $this->request->getFile('surat');
-    // Membuat nama random untuk suratnya
-    $namaSurat = $fileSurat->getRandomName();
-    // Move ke folder public/files/surat
-    $fileSurat->move('files/surat', $namaSurat);
-
-    $this->peminjamanRuangModel->save([
-      'id_peminjam'       => $this->request->getVar('id_peminjam'),
-      'id_ruangan'        => $this->request->getVar('id_ruangan'),
-      'tgl_pinjam'        => $this->request->getVar('tgl_pinjam'),
-      'tgl_kembali'       => $this->request->getVar('tgl_kembali'),
-      'tgl_permohonan'    => $this->request->getVar('tgl_permohonan'),
-      'tgl_selesai'       => $this->request->getVar('tgl_selesai'),
-      'keperluan'         => $this->request->getVar('keperluan'),
-      'status'            => $this->request->getVar('status'),
-      'surat_peminjaman'  => $namaSurat
-    ]);
-
-    session()->setFlashdata('pesan', 'Data berhasil ditambahkan.');
-    return redirect()->to(base_url() . '/admin/peminjamanruang');
-  }
-
-  public function edit($id)
-  {
-    $data = [
-      'title'     => 'Form Edit Peminjaman ruang',
-      'peminjaman' => $this->peminjamanRuangModel->find($id),
-      'peminjam'  => $this->peminjamModel->findAll(), // Dropdown
-      'ruangan'   => $this->ruanganModel->findAll(), // Dropdown
-      'validasi'  => \Config\Services::validation()
-    ];
-    return json_encode($data);
-  }
-
-  public function update($id)
-  {
-    //Validasi
-    if (!$this->validate([
-      'id_peminjam' => [
-        'rules'  => 'required',
-        'errors' => [
-          'required' => 'Peminjam harus diisi.'
-        ]
-      ],
-      'id_ruangan' => [
-        'rules'  => 'required',
-        'errors' => [
-          'required' => 'Ruangan harus diisi.'
-        ]
-      ],
-      'tgl_pinjam' => [
-        'rules'  => 'required',
-        'errors' => [
-          'required' => 'Tanggal harus diisi.'
-        ]
-      ],
-      'tgl_kembali' => [
-        'rules'  => 'required',
-        'errors' => [
-          'required' => 'Tanggal harus diisi.'
-        ]
-      ],
-      'tgl_permohonan' => [
-        'rules'  => 'required',
-        'errors' => [
-          'required' => 'Tanggal harus diisi.'
-        ]
-      ],
-      'tgl_selesai' => [
-        'rules'  => 'required',
-        'errors' => [
-          'required' => 'Tanggal harus diisi.'
-        ]
-      ],
-      'keperluan' => [
-        'rules'  => 'required',
-        'errors' => [
-          'required' => 'Harga harus diisi.'
-        ]
-      ],
-      'status' => [
-        'rules'  => 'required',
-        'errors' => [
-          'required' => 'Status harus diisi.'
-        ]
-      ],
-      'surat_peminjaman' => [
-        'rules'  => 'uploaded[surat]|ext_in[surat,pdf,docx]|max_size[surat,1024]',
-        'errors' => [
-          'uploaded'   => 'File harus diisi.',
-          'ext_in'     => 'File harus berextensi pdf atau word',
-          'max_size'   => 'File maksimal 1mb.',
-        ]
-      ],
-    ])) {
-      // Redirect
-      return redirect()->to(base_url() . '/admin/peminjamanruang/edit' . $id)->withInput();
-    }
-
-    // Mengambil surat baru
-    $fileSurat = $this->request->getFile('surat');
-    // Mengambil nama surat lama dari input hidden
-    $suratLama = $this->request->getVar('suratLama');
-    // Cek apakah mengupload surat
-    if ($fileSurat->getError() == 4) {
-      $namaSurat = $suratLama;
-    } else {
-      // Membuat nama random untuk suratnya
-      $namaSurat = $fileSurat->getRandomName();
-      // Move ke folder public/files/surat
-      $fileSurat->move('files/surat', $namaSurat);
-      // Hapus file lama
-      unlink('files/surat/' . $suratLama);
-    }
-
-    $this->peminjamanRuangModel->update($id, [
-      'id_peminjam'       => $this->request->getVar('id_peminjam'),
-      'id_ruangan'        => $this->request->getVar('id_ruangan'),
-      'tgl_pinjam'        => $this->request->getVar('tgl_pinjam'),
-      'tgl_kembali'       => $this->request->getVar('tgl_kembali'),
-      'tgl_permohonan'    => $this->request->getVar('tgl_permohonan'),
-      'tgl_selesai'       => $this->request->getVar('tgl_selesai'),
-      'keperluan'         => $this->request->getVar('keperluan'),
-      'status'            => $this->request->getVar('status'),
-      'surat_peminjaman'  => $namaSurat
-    ]);
-
-    session()->setFlashdata('pesan', 'Data berhasil diubah.');
-    return redirect()->to(base_url() . '/admin/peminjamanruang');
-  }
-
-  public function hapus($id)
-  {
-    // Nama surat
-    $namaSurat = $this->peminjamanRuangModel->find($id);
-    // Hapus file surat
-    unlink('files/surat/' . $namaSurat['surat']);
-    // Hapus data
-    $this->peminjamanRuangModel->delete($id);
-    session()->setFlashdata('pesan', 'Data berhasil dihapus.');
-    return redirect()->to(base_url() . '/admin/peminjamanruang');
+    return view('ruangan/laporan_cetak', $data);
   }
 
   public function changeStatus($id)
@@ -253,35 +37,53 @@ class Ruangan extends BaseController
     $status = $this->request->getVar('status');
     switch ($status) {
       case 'setuju':
-        if ($data['status'] != 'pending') return json_encode(['status' => 'error']);
-        if ($ruangan['status'] == 'tidak tersedia') return json_encode(['status' => 'Ruangan tidak tersedia']);
+        if ($data['status'] != 'pending') {
+          session()->setFlashdata('pesan', 'Status gagal');
+          return redirect()->to(base_url('admin/ruangan/peminjaman/' . $id));
+        }
+        if ($ruangan['status'] == 'tidak tersedia') {
+          session()->setFlashdata('pesan', 'Ruangan sudah terpinjam');
+          return redirect()->to(base_url('admin/ruangan/peminjaman/' . $id));
+        };
         // Mengganti status ruangan
         $this->ruanganModel->changeStatus($data['id_ruangan'], 'tidak tersedia');
         // Mengganti status di tabel peminjaman
         $this->peminjamanRuangModel->changeStatus($id, 'dipinjam');
         // Menggati status di tabel peminjam
         $this->peminjamModel->changeStatus($data['id_peminjam'], 'disetujui');
-        return json_encode(['status' => 'success']);
+
+        session()->setFlashdata('pesan', 'Peminjaman telah disetujui');
+        return redirect()->to(base_url('admin/ruangan/peminjaman'));
       case 'tolak':
-        if ($data['status'] != 'pending') return json_encode(['status' => 'error']);
+        if ($data['status'] != 'pending') {
+          session()->setFlashdata('pesan', 'Status gagal');
+          return redirect()->to(base_url('admin/ruangan/peminjaman/' . $id));
+        }
         // Mengganti status di tabel peminjaman
         $this->peminjamanRuangModel->changeStatus($id, 'batal');
         // Menggati status di tabel peminjam
         $this->peminjamModel->changeStatus($data['id_peminjam'], 'ditolak');
-        return json_encode(['status' => 'success']);
+
+        session()->setFlashdata('pesan', 'Peminjaman telah ditolak');
+        return redirect()->to(base_url('admin/ruangan/request'));
       case 'kembali':
-        if ($data['status'] != 'dipinjam') return json_encode(['status' => 'error']);
+        if ($data['status'] != 'dipinjam') {
+          session()->setFlashdata('pesan', 'Status gagal');
+          return redirect()->to(base_url('admin/ruangan/peminjaman/'));
+        }
         // Mengganti status ruangan
         $this->ruanganModel->changeStatus($data['id_ruangan'], 'tersedia');
         // Mengganti status di tabel peminjaman
         $this->peminjamanRuangModel->changeStatus($id, 'selesai');
+        $this->peminjamanRuangModel->set('tgl_selesai', date("Y/m/d"))->where('id_peminjaman', $id)->update();
         // Menggati status di tabel peminjam
         $this->peminjamModel->changeStatus($data['id_peminjam'], 'disetujui');
-        return json_encode(['status' => 'success']);
 
+        session()->setFlashdata('pesan', 'Peminjaman telah dikembalikan');
+        return redirect()->to(base_url('admin/ruangan/peminjaman'));
       default:
-        # code...
-        break;
+        session()->setFlashdata('pesan', 'Status gagal');
+        return redirect()->to(base_url('admin/ruangan/request'));
     }
   }
 }

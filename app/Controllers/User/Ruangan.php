@@ -4,15 +4,17 @@ namespace App\Controllers\User;
 
 use App\Controllers\BaseController;
 use App\Models\PeminjamanRuangModel;
+use App\Models\PeminjamModel;
 use App\Models\RuanganModel;
 
 class Ruangan extends BaseController
 {
-    protected $ruanganModel, $peminjamanRuangModel;
+    protected $ruanganModel, $peminjamanRuangModel, $peminjamModel;
     public function __construct()
     {
         $this->ruanganModel = new RuanganModel();
         $this->peminjamanRuangModel = new PeminjamanRuangModel();
+        $this->peminjamModel = new PeminjamModel();
     }
 
     public function index()
@@ -40,16 +42,32 @@ class Ruangan extends BaseController
         return view('ruangan/pinjam', $data);
     }
 
+    public function cetak($id)
+    {
+        $data = [
+            'title'  => 'Status Peminjaman Ruangan',
+            'peminjaman' => $this->peminjamanRuangModel->getDataByID($id),
+        ];
+        return view('ruangan/kartu', $data);
+    }
+
+    public function batal($id)
+    {
+        $peminjaman = $this->peminjamanRuangModel->find($id);
+
+        if (!$peminjaman) return;
+
+        $this->peminjamanRuangModel->changeStatus($id, 'batal');
+        $this->peminjamModel->changeStatus($peminjaman['id_peminjam'], 'batal');
+
+        session()->setFlashdata('pesan', 'Peminjaman berhasil dibatalkan.');
+        return redirect()->to(base_url('user/status/ruangan'));
+    }
+
     public function save($idRuangan)
     {
         //Validasi
         if (!$this->validate([
-            'id_ruangan' => [
-                'rules'  => 'required',
-                'errors' => [
-                    'required' => 'Ruangan harus diisi.'
-                ]
-            ],
             'tgl_pinjam' => [
                 'rules'  => 'required',
                 'errors' => [
@@ -62,30 +80,18 @@ class Ruangan extends BaseController
                     'required' => 'Tanggal harus diisi.'
                 ]
             ],
-            'tgl_permohonan' => [
-                'rules'  => 'required',
-                'errors' => [
-                    'required' => 'Tanggal harus diisi.'
-                ]
-            ],
             'keperluan' => [
                 'rules'  => 'required',
                 'errors' => [
                     'required' => 'Harga harus diisi.'
                 ]
             ],
-            'status' => [
-                'rules'  => 'required',
-                'errors' => [
-                    'required' => 'Status harus diisi.'
-                ]
-            ],
             'surat_peminjaman' => [
-                'rules'  => 'uploaded[surat]|ext_in[surat,pdf,docx]|max_size[surat,1024]',
+                'rules'  => 'uploaded[surat_peminjaman]|ext_in[surat_peminjaman,pdf,docx]|max_size[surat_peminjaman,1024]',
                 'errors' => [
-                    'uploaded'   => 'File harus diisi.',
-                    'ext_in'     => 'File harus berextensi pdf atau word',
-                    'max_size'   => 'File maksimal 1mb.',
+                    'uploaded'   => 'Surat harus diisi.',
+                    'ext_in'     => 'Surat harus berextensi pdf atau word',
+                    'max_size'   => 'Surat maksimal 1mb.',
                 ]
             ],
             'nama_peminjam' => [
@@ -110,15 +116,13 @@ class Ruangan extends BaseController
             // Redirect
             return redirect()->to(base_url() . '/user/ruangan/pinjam/' . $idRuangan)->withInput();
         }
-        $this->peminjamModel->save([
+        $idPeminjam = $this->peminjamModel->insert([
             'id_user'       => session()->idUser,
             'nama_peminjam' => $this->request->getVar('nama_peminjam'),
             'nama_instansi' => $this->request->getVar('nama_instansi'),
             'no_hp'         => $this->request->getVar('no_hp'),
             'status'        => 'pending',
-        ]);
-        // Get id_peminjam
-        $peminjam = $this->peminjamModel->where('id_user', session()->idUser)->where('nama_peminjam', $this->request->getVar('nama_peminjam'))->where('nama_instansi', $this->request->getVar('nama_instansi'))->where('no_hp', $this->request->getVar('no_hp'))->first();
+        ], true);
 
         // Mengambil surat
         $fileSurat = $this->request->getFile('surat_peminjaman');
@@ -128,18 +132,18 @@ class Ruangan extends BaseController
         $fileSurat->move('files/surat', $namaSurat);
 
         $this->peminjamanRuangModel->save([
-            'id_peminjam'       => $peminjam['id_peminjam'],
-            'id_ruangan'        => $this->request->getVar('id_ruangan'),
+            'id_peminjam'       => $idPeminjam,
+            'id_ruangan'        => $idRuangan,
             'tgl_pinjam'        => $this->request->getVar('tgl_pinjam'),
             'tgl_kembali'       => $this->request->getVar('tgl_kembali'),
-            'tgl_permohonan'    => $this->request->getVar('tgl_permohonan'),
-            'tgl_selesai'       => '',
+            'tgl_permohonan'    => date("Y/m/d"),
+            'tgl_selesai'       => null,
             'keperluan'         => $this->request->getVar('keperluan'),
-            'status'            => $this->request->getVar('status'),
+            'status'            => 'pending',
             'surat_peminjaman'  => $namaSurat
         ]);
 
         session()->setFlashdata('pesan', 'Data berhasil ditambahkan.');
-        return redirect()->to(base_url() . '/user/status');
+        return redirect()->to(base_url() . '/user/status/ruangan');
     }
 }

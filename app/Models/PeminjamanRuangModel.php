@@ -26,28 +26,53 @@ class PeminjamanRuangModel extends Model
         if (!$id) {
             return $this->join('peminjam', 'peminjam.id_peminjam=peminjaman_ruang.id_peminjam')->join('ruangan', 'ruangan.id_ruangan=peminjaman_ruang.id_ruangan')->findAll();
         } else {
-            return $this->join('peminjam', 'peminjam.id_peminjam=peminjaman_ruang.id_peminjam')->join('ruangan', 'ruangan.id_ruangan=peminjaman_ruang.id_ruangan')->where('')->findAll();
+            return $this->join('peminjam', 'peminjam.id_peminjam=peminjaman_ruang.id_peminjam')->join('ruangan', 'ruangan.id_ruangan=peminjaman_ruang.id_ruangan')->where('id_peminjaman', $id)->first();
         }
     }
 
-    public function getLaporan($tglAwal = null, $tglAkhir = null)
+    public function getLaporan($tglAwal = '0000-00-00', $tglAkhir = '2222-00-00')
     {
-        return $this->where('tgl_permohonan =>', $tglAwal)->where('tgl_permohonan <=', $tglAkhir)->where('status !=', 'pending')->join('peminjam', 'peminjam.id_peminjam=peminjaman_ruang.id_peminjam')->join('ruangan', 'ruangan.id_ruangan=peminjaman_ruang.id_ruangan')->findAll();
+        return $this
+            ->select('id_peminjaman, nama_peminjam, nama_ruangan, tgl_permohonan, tgl_pinjam, tgl_kembali, tgl_selesai, peminjaman_ruang.status')
+            ->where('tgl_permohonan >=', $tglAwal ? $tglAwal : '0000-00-00')
+            ->where('tgl_permohonan <=', $tglAkhir ? $tglAkhir : '2222-00-00')
+            ->whereIn('peminjaman_ruang.status', ['selesai', 'dipinjam'. 'batal'])
+            ->join('ruangan', 'ruangan.id_ruangan=peminjaman_ruang.id_ruangan')
+            ->join('peminjam', 'peminjam.id_peminjam=peminjaman_ruang.id_peminjam')
+            ->findAll();
     }
 
     public function getDataByStatus($status = 'pending')
     {
-        return $this->join('peminjam', 'peminjam.id_peminjam=peminjaman_ruang.id_peminjam')->join('ruangan', 'ruangan.id_ruangan=peminjaman_ruang.id_ruangan')->where('peminjam.status', $status)->findAll();
+        return $this->join('peminjam', 'peminjam.id_peminjam=peminjaman_ruang.id_peminjam')->join('ruangan', 'ruangan.id_ruangan=peminjaman_ruang.id_ruangan')->where('peminjaman_ruang.status', $status)->findAll();
     }
 
     public function getDataByStatusExcept($status = 'pending')
     {
-        return $this->join('peminjam', 'peminjam.id_peminjam=peminjaman_ruang.id_peminjam')->join('ruangan', 'ruangan.id_ruangan=peminjaman_ruang.id_ruangan')->where('peminjam.status !=', $status)->findAll();
+        return $this->join('peminjam', 'peminjam.id_peminjam=peminjaman_ruang.id_peminjam')->join('ruangan', 'ruangan.id_ruangan=peminjaman_ruang.id_ruangan')->where('peminjaman_ruang.status !=', $status)->findAll();
     }
-
 
     public function changeStatus($id, $status)
     {
         $this->set('status', $status)->where('id_peminjaman', $id)->update();
+    }
+
+    public function getDataByID($id)
+    {
+        return $this
+            ->select('id_peminjaman, nama_peminjam, nama_instansi, nama_ruangan, no_hp, tgl_pinjam, tgl_kembali, peminjam.status, keperluan')
+            ->join('ruangan', 'ruangan.id_ruangan=peminjaman_ruang.id_ruangan')
+            ->join('peminjam', 'peminjam.id_peminjam=peminjaman_ruang.id_peminjam')
+            ->find($id);
+    }
+
+    public function getDataByUser($id)
+    {
+        return $this
+            ->select('id_peminjaman, nama_peminjam, nama_instansi, nama_ruangan, tgl_pinjam, peminjam.status, keperluan')
+            ->join('ruangan', 'ruangan.id_ruangan=peminjaman_ruang.id_ruangan')
+            ->join('peminjam', 'peminjam.id_peminjam=peminjaman_ruang.id_peminjam')
+            ->where('peminjam.id_user', $id)
+            ->findAll();
     }
 }

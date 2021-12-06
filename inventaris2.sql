@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 16, 2021 at 08:34 PM
+-- Generation Time: Dec 02, 2021 at 01:50 PM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.0.12
 
@@ -43,7 +43,7 @@ CREATE TABLE `barang` (
 --
 
 INSERT INTO `barang` (`id_barang`, `id_kategori`, `nama_barang`, `jml_barang`, `tgl_perolehan`, `harga`, `foto`, `deskripsi`) VALUES
-(2, 1, 'Sapu Ajaib', 120, '2021-11-17', 1230000, '1637090853_b1fca1b7f9744979995b.jpg', 'Bukan sapu biasa');
+(5, 1, 'Barang Ghaib', 2, '2021-11-22', 2400000, '1637559787_43e4dc4bbf1923ffd2fe.jpg', 'Barang ghaib, sulit dicari');
 
 -- --------------------------------------------------------
 
@@ -75,7 +75,7 @@ CREATE TABLE `peminjam` (
   `nama_peminjam` varchar(255) NOT NULL,
   `nama_instansi` varchar(255) NOT NULL,
   `no_hp` varchar(255) NOT NULL,
-  `status` enum('pending','disetujui','ditolak') NOT NULL
+  `status` enum('pending','disetujui','ditolak','batal') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -83,7 +83,14 @@ CREATE TABLE `peminjam` (
 --
 
 INSERT INTO `peminjam` (`id_peminjam`, `id_user`, `nama_peminjam`, `nama_instansi`, `no_hp`, `status`) VALUES
-(1, 1, 'Siti Napi\'ah', 'ULM', '08969876234', 'pending');
+(1, 1, 'Siti Napi\'ah', 'ULM', '08969876234', 'disetujui'),
+(2, 2, 'Udin Gambut', 'Bajak Laut Topi Jerami', '089691786852', 'disetujui'),
+(4, 2, 'Ujang', 'Bajak Laut Topi Jerami', '089691786852', 'batal'),
+(5, 2, 'Ujang', 'Bajak Laut Topi Jerami', '089691786852', 'batal'),
+(6, 2, 'Ujang', 'Bajak Laut Topi Jerami', '089691786852', 'batal'),
+(7, 2, 'Ujang', 'Bajak Laut Topi Jerami', '0896917856852', 'pending'),
+(8, 2, 'Udin Gambut', 'Bajak Laut Topi Jerami', '089691786242', 'batal'),
+(9, 2, 'Udin Gambut', 'Bajak Laut Topi Jerami', '0896917856852', 'disetujui');
 
 -- --------------------------------------------------------
 
@@ -105,6 +112,16 @@ CREATE TABLE `peminjaman_barang` (
   `surat_peminjaman` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `peminjaman_barang`
+--
+
+INSERT INTO `peminjaman_barang` (`id_peminjaman`, `id_peminjam`, `id_barang`, `jml_barang`, `tgl_pinjam`, `tgl_kembali`, `tgl_permohonan`, `tgl_selesai`, `keperluan`, `status`, `surat_peminjaman`) VALUES
+(2, 4, 5, 2, '2021-12-01', '2021-12-06', '2021-12-01', NULL, 'Minjem doang bentaran', 'batal', '1638345125_9c6b4670bd12a8079a51.pdf'),
+(3, 5, 5, 2, '2021-12-01', '2021-12-15', '2021-12-01', NULL, 'Minjem doang bentaran', 'batal', '1638345887_7fbf90dfd1f816baa596.pdf'),
+(4, 6, 5, 2, '2021-12-01', '2021-12-09', '2021-12-01', NULL, 'Minjem doang bentaran', 'batal', '1638346524_8ec7bed03cadeb890f7c.pdf'),
+(5, 7, 5, 2, '2021-12-01', '2021-12-08', '2021-12-01', NULL, 'Minjem doang bentaran', 'pending', '1638346668_85ff5df533e2d6fc61ae.pdf');
+
 -- --------------------------------------------------------
 
 --
@@ -124,6 +141,16 @@ CREATE TABLE `peminjaman_ruang` (
   `surat_peminjaman` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `peminjaman_ruang`
+--
+
+INSERT INTO `peminjaman_ruang` (`id_peminjaman`, `id_peminjam`, `id_ruangan`, `tgl_pinjam`, `tgl_kembali`, `tgl_permohonan`, `tgl_selesai`, `keperluan`, `status`, `surat_peminjaman`) VALUES
+(1, 1, 1, '2021-11-24', '2021-11-27', '2021-11-23', '2021-11-27', 'Minjem doang bentaran', 'selesai', 'surat_palsu.pdf'),
+(2, 2, 1, '2021-11-29', '2021-12-03', '2021-11-27', '2021-11-28', 'Minjem doang bentaran', 'selesai', '1638060945_ec346a10ee4f1fc928c3.pdf'),
+(3, 8, 1, '2021-12-01', '2021-12-09', '2021-12-01', NULL, 'Minjem doang bentaran', 'batal', '1638348916_bd95580f83c2e5f248fc.pdf'),
+(4, 9, 1, '2021-12-01', '2021-12-15', '2021-12-01', '2021-12-01', 'Minjem doang bentaran', 'selesai', '1638349008_85c33df20e4fcdc7a475.pdf');
+
 -- --------------------------------------------------------
 
 --
@@ -137,6 +164,13 @@ CREATE TABLE `ruangan` (
   `status` enum('tersedia','tidak tersedia','','') NOT NULL,
   `deskripsi` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `ruangan`
+--
+
+INSERT INTO `ruangan` (`id_ruangan`, `nama_ruangan`, `kapasitas`, `status`, `deskripsi`) VALUES
+(1, 'Ruang Umum', 100, 'tersedia', 'Ruang normal untuk umum');
 
 -- --------------------------------------------------------
 
@@ -158,7 +192,8 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id_user`, `nama_lengkap`, `email`, `username`, `password`, `role`) VALUES
-(1, 'Siti Napi\'ah', 'sitinapiah06@gmail.com', 'sitina123', '7e84c6c018e135ece8a538d95ab368e72252143a', 'admin');
+(1, 'Siti Napi\'ah', 'sitinapiah06@gmail.com', 'sitina123', 'd164b39e9ec43f65376629da9ccf41780775f656', 'admin'),
+(2, 'Dwa Meizadewa', 'infamous0192@gmail.com', 'infamous0192', 'd164b39e9ec43f65376629da9ccf41780775f656', 'user');
 
 --
 -- Indexes for dumped tables
@@ -220,43 +255,43 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `barang`
 --
 ALTER TABLE `barang`
-  MODIFY `id_barang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_barang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `kategori`
 --
 ALTER TABLE `kategori`
-  MODIFY `id_kategori` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_kategori` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `peminjam`
 --
 ALTER TABLE `peminjam`
-  MODIFY `id_peminjam` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_peminjam` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `peminjaman_barang`
 --
 ALTER TABLE `peminjaman_barang`
-  MODIFY `id_peminjaman` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_peminjaman` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `peminjaman_ruang`
 --
 ALTER TABLE `peminjaman_ruang`
-  MODIFY `id_peminjaman` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_peminjaman` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `ruangan`
 --
 ALTER TABLE `ruangan`
-  MODIFY `id_ruangan` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_ruangan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables

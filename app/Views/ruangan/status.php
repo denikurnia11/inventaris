@@ -1,11 +1,25 @@
-<?= $this->extend('template') ?>
+<?php
+function badge($status)
+{
+  switch ($status) {
+    case 'disetujui':
+      return 'badge badge-success';
+    case 'pending':
+      return 'badge badge-warning';
+    default:
+      return 'badge badge-danger';
+  }
+}
+?>
+
+<?= $this->extend('template_user') ?>
 
 <?= $this->section('content') ?>
 
 <div class="row">
   <div class="col-lg-12"><br />
     <ol class="breadcrumb">
-      <li><a href="<?= base_url('admin/ruangan'); ?>">Ruangan</a></li>
+      <li><a href="<?= base_url('user/ruangan'); ?>">Ruangan</a></li>
       <li class="active"><?= $title ?></li>
     </ol>
   </div>
@@ -25,10 +39,10 @@
               <td>No.</td>
               <td>ID Peminjaman</td>
               <td>Nama Peminjam</td>
+              <td>Nama Instansi</td>
               <td>Nama Ruangan</td>
-              <td>Tanggal Permohonan</td>
               <td>Tanggal Pinjam</td>
-              <td>Tanggal Kembali</td>
+              <td>Status</td>
               <td>Aksi</td>
             </tr>
           </thead>
@@ -39,16 +53,20 @@
                 <td><?= $no++; ?></td>
                 <td><?= $row['id_peminjaman'] ?></td>
                 <td><?= $row['nama_peminjam'] ?></td>
+                <td><?= $row['nama_instansi'] ?></td>
                 <td><?= $row['nama_ruangan'] ?></td>
-                <td><?= date('d F Y', strtotime($row['tgl_permohonan'])) ?></td>
                 <td><?= date('d F Y', strtotime($row['tgl_pinjam'])) ?></td>
-                <td><?= date('d F Y', strtotime($row['tgl_kembali'])) ?></td>
+                <td class="text-center" style="text-transform: capitalize;">
+                  <div class="<?= badge($row['status']) ?>">
+                    <?= $row['status'] ?>
+                  </div>
+                </td>
                 <td class="text-center">
-                  <a href="<?= base_url('admin/ruangan/peminjaman/' . $row['id_peminjaman']) ?>" style="text-decoration: none !important;">
-                    <button class="btn btn-primary btn-xs">
-                      Detail
-                    </button>
-                  </a>
+                  <?php if ($row['status'] == 'pending') : ?>
+                    <button class="btn btn-danger btn-xs" onclick="batalkan(<?= $row['id_peminjaman'] ?>)">Batalkan</button>
+                  <?php elseif ($row['status'] == 'disetujui') : ?>
+                    <button class="btn btn-info btn-xs" onclick="lihat(<?= $row['id_peminjaman'] ?>)">Lihat</button>
+                  <?php endif; ?>
                 </td>
               </tr>
             <?php endforeach; ?>
@@ -58,5 +76,15 @@
     </div>
   </div>
 </div>
+
+<script>
+  const batalkan = (id) => {
+    window.location.replace(`<?= base_url('user/ruangan/batal') ?>/${id}`)
+  }
+
+  const lihat = (id) => {
+    window.location.replace(`<?= base_url('user/ruangan/cetak') ?>/${id}`)
+  }
+</script>
 
 <?= $this->endSection('content') ?>

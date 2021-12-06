@@ -6,15 +6,17 @@ use App\Controllers\BaseController;
 use App\Models\BarangModel;
 use App\Models\KategoriModel;
 use App\Models\PeminjamanBarangModel;
+use App\Models\PeminjamModel;
 
 class Barang extends BaseController
 {
-    protected $barangModel, $kategoriModel, $peminjamanBarangModel;
+    protected $barangModel, $kategoriModel, $peminjamanBarangModel, $peminjamModel;
     public function __construct()
     {
         $this->barangModel = new BarangModel();
         $this->kategoriModel = new KategoriModel();
         $this->peminjamanBarangModel = new PeminjamanBarangModel();
+        $this->peminjamModel = new PeminjamModel();
     }
 
     public function index()
@@ -225,13 +227,11 @@ class Barang extends BaseController
 
     public function request()
     {
-        $peminjaman = new PeminjamanBarangModel();
         $data = [
             'title'     => 'Request Peminjaman Barang',
-            'peminjaman' => $peminjaman->getData()
+            'peminjaman' => $this->peminjamanBarangModel->getDataByStatus('pending')
         ];
-
-        return json_encode($data);
+        return view('barang/request', $data);
     }
 
     public function laporan()
@@ -243,6 +243,42 @@ class Barang extends BaseController
             'title'     => 'Laporan Peminjaman Barang',
             'peminjaman' => $this->peminjamanBarangModel->getLaporan($tglAwal, $tglAkhir)
         ];
+
         return view('barang/laporan', $data);
+    }
+
+    public function peminjaman($id = null)
+    {
+        if ($id !== null) return $this->detailPeminjaman($id);
+        $data = [
+            'title'     => 'Daftar Peminjaman Barang',
+            'peminjaman' => $this->peminjamanBarangModel->getDataByStatus('dipinjam')
+        ];
+        return view('barang/peminjaman', $data);
+    }
+
+    public function cetak()
+    {
+        $data = [
+            'title' => 'Laporan Data Barang',
+            'barang' => $this->barangModel->getData()
+        ];
+        return view('barang/cetak', $data);
+    }
+
+    private function detailPeminjaman($idPeminjaman)
+    {
+        $peminjaman = $this->peminjamanBarangModel->find($idPeminjaman);
+        $barang = $this->barangModel->find($peminjaman['id_barang']);
+        $peminjam = $this->peminjamModel->find($peminjaman['id_peminjam']);
+
+        $data = [
+            'title'     => 'Detail Peminjaman Barang',
+            'peminjaman' => $peminjaman,
+            'barang' => $barang,
+            'peminjam' => $peminjam
+        ];
+
+        return view('barang/peminjaman_detail', $data);
     }
 }

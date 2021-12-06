@@ -22,7 +22,7 @@
           <div class="form-group">
             <label class="col-sm-2 text-left" for="nama_lengkap">Nama Lengkap</label>
             <div class="col-sm-10">
-              <input type="text" id="nama_lengkap" name="nama_lengkap" class="form-control <?= ($validasi->hasError('nama_lengkap')) ? 'is-invalid' : '' ?>" placeholder="Nama Lengkap">
+              <input type="text" id="nama_lengkap" name="nama_lengkap" value="<?= old('nama_lengkap') ?>" class="form-control <?= ($validasi->hasError('nama_lengkap')) ? 'is-invalid' : '' ?>" placeholder="Nama Lengkap">
               <div class="invalid-feedback">
                 <?= $validasi->getError('nama_lengkap'); ?>
               </div>
@@ -32,7 +32,7 @@
           <div class="form-group">
             <label class="col-sm-2 text-left" for="email">Email</label>
             <div class="col-sm-10">
-              <input type="email" id="email" name="email" class="form-control <?= ($validasi->hasError('email')) ? 'is-invalid' : '' ?>" placeholder="Email">
+              <input type="email" id="email" name="email" value="<?= old('email') ?>" class="form-control <?= ($validasi->hasError('email')) ? 'is-invalid' : '' ?>" placeholder="Email">
               <div class="invalid-feedback">
                 <?= $validasi->getError('email'); ?>
               </div>
@@ -42,7 +42,7 @@
           <div class="form-group">
             <label class="col-sm-2 text-left" for="username">Username</label>
             <div class="col-sm-10">
-              <input type="text" id="username" name="username" class="form-control <?= ($validasi->hasError('username')) ? 'is-invalid' : '' ?>" placeholder="Username">
+              <input type="text" id="username" value="<?= old('username') ?>" name="username" class="form-control <?= ($validasi->hasError('username')) ? 'is-invalid' : '' ?>" placeholder="Username">
               <div class="invalid-feedback">
                 <?= $validasi->getError('username'); ?>
               </div>

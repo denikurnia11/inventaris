@@ -5,7 +5,7 @@
 <div class="row">
   <div class="col-lg-12"><br />
     <ol class="breadcrumb">
-      <li><a href="<?= base_url('admin/user') ?>">user</a></li>
+      <li><a href="<?= base_url('admin/user') ?>">User</a></li>
       <li class="active"><?= $title ?></li>
     </ol>
   </div>
@@ -20,6 +20,7 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         <a href="<?= base_url('admin/user/tambah') ?>" class="btn btn-primary btn-sm">Tambah</a>
+        <a href="<?= base_url('admin/user/cetak') ?>" class="btn btn-success btn-sm">Cetak</a>
       </div>
       <div class="panel-body">
         <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
@@ -45,6 +46,11 @@
                 <td><?= $row['email'] ?></td>
                 <td><?= $row['role'] ?></td>
                 <td class="text-center">
+                  <a href="<?= base_url('admin/user/edit/' . $row['id_user']) ?>" style="text-decoration: none !important;">
+                    <button class="btn btn-success btn-xs">
+                      Edit
+                    </button>
+                  </a>
                   <button class="btn btn-danger btn-xs hapus" kode="<?= $row['id_user'] ?>" name="<?= $row['username'] ?>">Hapus</button>
                 </td>
               </tr>

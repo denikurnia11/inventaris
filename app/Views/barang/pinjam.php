@@ -5,7 +5,7 @@
 <div class="row">
   <div class="col-lg-12"><br />
     <ol class="breadcrumb">
-      <li><a href="<?= base_url('user/ruangan'); ?>">Ruangan</a></li>
+      <li><a href="<?= base_url('user/barang'); ?>">Barang</a></li>
       <li class="active"><?= $title ?></li>
     </ol>
   </div>
@@ -18,11 +18,28 @@
         Masukkan Data Peminjaman
       </div>
       <div class="panel-body">
-        <form method="POST" action="<?= base_url('user/ruangan/save/' . $ruangan['id_ruangan']) ?>" enctype="multipart/form-data" class="form-horizontal">
+        <form method="POST" action="<?= base_url('user/barang/save/' . $barang['id_barang']) ?>" enctype="multipart/form-data" class="form-horizontal">
           <div class="form-group">
-            <label class="col-sm-2 text-left" for="nama_ruangan">Nama Ruangan</label>
+            <label class="col-sm-2 text-left" for="nama_barang">Nama Barang</label>
             <div class="col-sm-10">
-              <input type="text" id="nama_ruangan" name="nama_ruangan" value="<?= $ruangan['nama_ruangan'] ?>" readonly class="form-control" placeholder="Nama Ruangan">
+              <input type="text" id="nama_barang" name="nama_barang" value="<?= $barang['nama_barang'] ?>" readonly class="form-control" placeholder="Nama Ruangan">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 text-left" for="jumlah">Jumlah Barang</label>
+            <div class="col-sm-10">
+              <input type="text" id="jumlah" name="jumlah" value="<?= $barang['jml_barang'] ?>" readonly class="form-control">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 text-left" for="jml_barang">Jumlah Pinjam</label>
+            <div class="col-sm-10">
+              <input type="number" id="jml_barang" name="jml_barang" value="<?= old('jml_barang') ?>" class="form-control <?= ($validasi->hasError('jml_barang')) ? 'is-invalid' : '' ?>" placeholder="Jumlah Pinjam">
+              <div class="invalid-feedback">
+                <?= $validasi->getError('jml_barang'); ?>
+              </div>
             </div>
           </div>
 

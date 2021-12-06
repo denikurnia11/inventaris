@@ -24,6 +24,7 @@ $fmt = new NumberFormatter('id_ID', NumberFormatter::CURRENCY);
     <div class="panel panel-default">
       <div class="panel-heading">
         <a href="<?= base_url('admin/barang/tambah') ?>" class="btn btn-primary btn-sm">Tambah</a>
+        <a href="<?= base_url('admin/barang/cetak') ?>" class="btn btn-success btn-sm">Cetak</a>
       </div>
       <div class="panel-body">
         <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
@@ -55,9 +56,9 @@ $fmt = new NumberFormatter('id_ID', NumberFormatter::CURRENCY);
                 </td>
                 <td><?= $row['id_barang'] ?></td>
                 <td><?= $row['nama_barang'] ?></td>
+                <td><?= $row['jml_barang'] ?></td>
                 <td><?= $row['nama_kategori'] ?></td>
                 <td><?= $row['tgl_perolehan'] ?></td>
-                <td><?= $row['jml_barang'] ?></td>
                 <td><?= $fmt->formatCurrency($row['harga'], "IDR") ?></td>
                 <td><?= $row['deskripsi'] ?></td>
                 <td class="text-center">

@@ -23,6 +23,28 @@
   <link href="<?= base_url('dist/css/sb-admin-2.css') ?>" rel="stylesheet">
   <link href="<?= base_url('vendor/font-awesome/css/font-awesome.min.css') ?>" rel="stylesheet" type="text/css">
   <script src="<?= base_url('vendor/jquery/jquery.min.js') ?>"></script>
+
+
+  <style>
+    body {
+      background: url('<?= base_url('img/Background SKB.jpeg') ?>');
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .card {
+      background: white;
+      border-radius: 1rem;
+
+      padding: 2rem;
+      border: 1px solid #a5a5a5;
+      --tw-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+      box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    }
+  </style>
 </head>
 
 <body>
@@ -53,45 +75,48 @@
     </ul>
   </nav>
 
-  <div class="container mt-md-5">
-    <div class="row mt-md-5" style="display: flex; justify-content: center; align-items: center; padding: 4rem 0;">
-      <div class="col-xs-12 col-md-6 text-center" style="margin: auto;">
-        <h1 class="mb-5">Daftar</h1>
-        <form action="<?= base_url('auth/registrasi/create') ?>" class="my-4">
-          <div class="form-group mb-4 text-left">
-            <input type="email" name="email" id="email" placeholder="Email" value="<?= old('email') ?>" class="form-control <?= ($validasi->hasError('email')) ? 'is-invalid' : '' ?>">
-            <div class="invalid-feedback">
-              <?= $validasi->getError('email'); ?>
-            </div>
+  <div class="row p-5 mt-md-5 d-flex align-items-center justify-content-center">
+    <div class="col-xs-12 col-sm-6 col-lg-3 mx-auto row mt-md-5 text-center card">
+      <h1 class="mb-5">Daftar</h1>
+      <?php if (session()->getFlashdata('pesan')) : ?>
+        <div class="alert alert-danger text-start d-flex justify-content-between align-items-center" role="alert">
+          <?= session()->getFlashdata('pesan'); ?>
+        </div>
+      <?php endif; ?>
+      <form action="<?= base_url('auth/registrasi/create') ?>" class="my-4">
+        <div class="form-group mb-4 text-left">
+          <input type="email" name="email" id="email" placeholder="Email" value="<?= old('email') ?>" class="form-control <?= ($validasi->hasError('email')) ? 'is-invalid' : '' ?>">
+          <div class="invalid-feedback">
+            <?= $validasi->getError('email'); ?>
           </div>
-          <div class="form-group mb-4 text-left">
-            <input type="text" name="nama_lengkap" id="nama_lengkap" placeholder="Nama Lengkap" value="<?= old('nama_lengkap') ?>" class="form-control <?= ($validasi->hasError('nama_lengkap')) ? 'is-invalid' : '' ?>">
-            <div class="invalid-feedback">
-              <?= $validasi->getError('nama_lengkap'); ?>
-            </div>
+        </div>
+        <div class="form-group mb-4 text-left">
+          <input type="text" name="nama_lengkap" id="nama_lengkap" placeholder="Nama Lengkap" value="<?= old('nama_lengkap') ?>" class="form-control <?= ($validasi->hasError('nama_lengkap')) ? 'is-invalid' : '' ?>">
+          <div class="invalid-feedback">
+            <?= $validasi->getError('nama_lengkap'); ?>
           </div>
-          <div class="form-group mb-4 text-left">
-            <input type="text" name="username" id="username" placeholder="Username" value="<?= old('username') ?>" class="form-control <?= ($validasi->hasError('username')) ? 'is-invalid' : '' ?>">
-            <div class="invalid-feedback">
-              <?= $validasi->getError('username'); ?>
-            </div>
+        </div>
+        <div class="form-group mb-4 text-left">
+          <input type="text" name="username" id="username" placeholder="Username" value="<?= old('username') ?>" class="form-control <?= ($validasi->hasError('username')) ? 'is-invalid' : '' ?>">
+          <div class="invalid-feedback">
+            <?= $validasi->getError('username'); ?>
           </div>
-          <div class="form-group mb-4 text-left">
-            <input type="password" name="password" id="password" placeholder="Password" value="<?= old('password') ?>" class="form-control <?= ($validasi->hasError('password')) ? 'is-invalid' : '' ?>">
-            <div class="invalid-feedback">
-              <?= $validasi->getError('password'); ?>
-            </div>
+        </div>
+        <div class="form-group mb-4 text-left">
+          <input type="password" name="password" id="password" placeholder="Password" value="<?= old('password') ?>" class="form-control <?= ($validasi->hasError('password')) ? 'is-invalid' : '' ?>">
+          <div class="invalid-feedback">
+            <?= $validasi->getError('password'); ?>
           </div>
-          <div class="form-group mb-4 text-left">
-            <input type="password" name="cpassword" id="cpassword" placeholder="Konfirmasi Password" value="<?= old('cpassword') ?>" class="form-control <?= ($validasi->hasError('cpassword')) ? 'is-invalid' : '' ?>">
-            <div class="invalid-feedback">
-              <?= $validasi->getError('cpassword'); ?>
-            </div>
+        </div>
+        <div class="form-group mb-4 text-left">
+          <input type="password" name="cpassword" id="cpassword" placeholder="Konfirmasi Password" value="<?= old('cpassword') ?>" class="form-control <?= ($validasi->hasError('cpassword')) ? 'is-invalid' : '' ?>">
+          <div class="invalid-feedback">
+            <?= $validasi->getError('cpassword'); ?>
           </div>
-          <button type="submit" class="btn btn-primary">Daftar</button>
-          <p class="mt-5">Sudah punya akun? <a href="<?= base_url('login') ?>">Login</a></p>
-        </form>
-      </div>
+        </div>
+        <button type="submit" class="btn btn-primary mt-4" style="width: 100%;">Daftar</button>
+        <p class="mt-5">Sudah punya akun? <a href="<?= base_url('login') ?>">Login</a></p>
+      </form>
     </div>
   </div>
 

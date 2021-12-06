@@ -175,4 +175,13 @@ class User extends BaseController
         session()->setFlashdata('pesan', 'Data berhasil dihapus.');
         return redirect()->to(base_url() . '/admin/user');
     }
+
+    public function cetak()
+    {
+        $data = [
+            'title' => 'Laporan Data User',
+            'user' => $this->userModel->findAll()
+        ];
+        return view('user/cetak', $data);
+    }
 }

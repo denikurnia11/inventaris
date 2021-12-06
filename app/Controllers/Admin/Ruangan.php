@@ -4,15 +4,17 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use App\Models\PeminjamanRuangModel;
+use App\Models\PeminjamModel;
 use App\Models\RuanganModel;
 
 class Ruangan extends BaseController
 {
-    protected $ruanganModel, $peminjamanRuangModel;
+    protected $ruanganModel, $peminjamanRuangModel, $peminjamModel;
     public function __construct()
     {
         $this->ruanganModel = new RuanganModel();
         $this->peminjamanRuangModel = new PeminjamanRuangModel();
+        $this->peminjamModel = new PeminjamModel();
     }
 
     public function index()
@@ -134,23 +136,39 @@ class Ruangan extends BaseController
         return redirect()->to(base_url() . '/admin/ruangan');
     }
 
-    public function request()
+    public function peminjaman($id = null)
     {
-        $peminjaman = new PeminjamanRuangModel();
-        $data = [
-            'title'     => 'Request Peminjaman Ruangan',
-            'peminjaman' => $peminjaman->getDataByStatus('pending')
-        ];
-        return view('ruangan/request', $data);
-    }
-
-    public function peminjaman()
-    {
+        if ($id !== null) return $this->detailPeminjaman($id);
         $data = [
             'title'     => 'Daftar Peminjaman Ruangan',
             'peminjaman' => $this->peminjamanRuangModel->getDataByStatus('dipinjam')
         ];
         return view('ruangan/peminjaman', $data);
+    }
+
+    private function detailPeminjaman($idPeminjaman)
+    {
+        $peminjaman = $this->peminjamanRuangModel->find($idPeminjaman);
+        $ruangan = $this->ruanganModel->find($peminjaman['id_ruangan']);
+        $peminjam = $this->peminjamModel->find($peminjaman['id_peminjam']);
+
+        $data = [
+            'title'     => 'Detail Peminjaman Ruangan',
+            'peminjaman' => $peminjaman,
+            'ruangan' => $ruangan,
+            'peminjam' => $peminjam
+        ];
+
+        return view('ruangan/peminjaman_detail', $data);
+    }
+
+    public function request()
+    {
+        $data = [
+            'title'     => 'Request Peminjaman Ruangan',
+            'peminjaman' => $this->peminjamanRuangModel->getDataByStatus('pending')
+        ];
+        return view('ruangan/request', $data);
     }
 
     public function laporan()
@@ -162,6 +180,16 @@ class Ruangan extends BaseController
             'title'     => 'Laporan Peminjaman Ruangan',
             'peminjaman' => $this->peminjamanRuangModel->getLaporan($tglAwal, $tglAkhir)
         ];
+
         return view('ruangan/laporan', $data);
+    }
+
+    public function cetak()
+    {
+        $data = [
+            'title' => 'Laporan Data Ruangan',
+            'ruangan' => $this->ruanganModel->findAll()
+        ];
+        return view('ruangan/cetak', $data);
     }
 }

@@ -23,7 +23,7 @@ class Barang extends BaseController
             'title'  => 'Data Barang',
             'barang' => $this->barangModel->getData()
         ];
-        return json_encode($data);
+        return view('barang/index_user', $data);
     }
 
     public function pinjam($idBarang)
@@ -33,23 +33,48 @@ class Barang extends BaseController
             'barang' => $this->barangModel->find($idBarang),
             'validasi' => \Config\Services::validation()
         ];
-        return json_encode($data);
+        return view('barang/pinjam', $data);
+    }
+
+    public function cetak($id)
+    {
+        $data = [
+            'title'  => 'Status Peminjaman Barang',
+            'peminjaman' => $this->peminjamanBarangModel->getDataByID($id),
+        ];
+        return view('barang/kartu', $data);
+    }
+
+    public function batal($id)
+    {
+        $peminjaman = $this->peminjamanBarangModel->find($id);
+
+        if (!$peminjaman) return;
+
+        $this->peminjamanBarangModel->changeStatus($id, 'batal');
+        $this->peminjamModel->changeStatus($peminjaman['id_peminjam'], 'batal');
+
+        session()->setFlashdata('pesan', 'Peminjaman berhasil dibatalkan.');
+        return redirect()->to(base_url('user/status/barang'));
     }
 
     public function save($idBarang)
     {
+        // Mencek jumlah barang
+        $barang = $this->barangModel->find($idBarang);
+
+        if ($barang['jml_barang'] <= 0) return redirect()->back();
+
+        $jml_barang = $barang['jml_barang'] + 1;
+
         //Validasi
         if (!$this->validate([
-            'id_barang' => [
-                'rules'  => 'required',
-                'errors' => [
-                    'required' => 'Barang harus diisi.'
-                ]
-            ],
             'jml_barang' => [
-                'rules'  => 'required',
+                'rules'  => "required|greater_than[0]|less_than[$jml_barang]",
                 'errors' => [
-                    'required' => 'Jumlah barang harus diisi.'
+                    'required' => 'Jumlah barang harus diisi.',
+                    'greater_than' => 'Jumlah barang harus lebih dari 0',
+                    'less_than' => 'Jumlah barang tidak mencukupi'
                 ]
             ],
             'tgl_pinjam' => [
@@ -64,12 +89,6 @@ class Barang extends BaseController
                     'required' => 'Tanggal harus diisi.'
                 ]
             ],
-            'tgl_permohonan' => [
-                'rules'  => 'required',
-                'errors' => [
-                    'required' => 'Tanggal harus diisi.'
-                ]
-            ],
             'keperluan' => [
                 'rules'  => 'required',
                 'errors' => [
@@ -77,11 +96,11 @@ class Barang extends BaseController
                 ]
             ],
             'surat_peminjaman' => [
-                'rules'  => 'uploaded[surat]|ext_in[surat,pdf,docx]|max_size[surat,1024]',
+                'rules'  => 'uploaded[surat_peminjaman]|ext_in[surat_peminjaman,pdf,docx]|max_size[surat_peminjaman,1024]',
                 'errors' => [
-                    'uploaded'   => 'File harus diisi.',
-                    'ext_in'     => 'File harus berextensi pdf atau word',
-                    'max_size'   => 'File maksimal 1mb.',
+                    'uploaded'   => 'Surat harus diisi.',
+                    'ext_in'     => 'Surat harus berextensi pdf atau word',
+                    'max_size'   => 'Surat maksimal 1mb.',
                 ]
             ],
             'nama_peminjam' => [
@@ -106,21 +125,14 @@ class Barang extends BaseController
             // Redirect
             return redirect()->to(base_url() . '/user/barang/pinjam/' . $idBarang)->withInput();
         }
-        // Mencek jumlah barang
-        $barang = $this->barangModel->find($this->request->getVar('id_barang'));
-        if ($this->request->getVar('jml_barang') > $barang['jml_barang']) {
-            return json_encode(['status' => 'Barang tidak cukup.']);
-        }
 
-        $this->peminjamModel->save([
+        $idPeminjam = $this->peminjamModel->insert([
             'id_user'       => session()->idUser,
             'nama_peminjam' => $this->request->getVar('nama_peminjam'),
             'nama_instansi' => $this->request->getVar('nama_instansi'),
             'no_hp'         => $this->request->getVar('no_hp'),
             'status'        => 'pending',
-        ]);
-        // Get id_peminjam
-        $peminjam = $this->peminjamModel->where('id_user', session()->idUser)->where('nama_peminjam', $this->request->getVar('nama_peminjam'))->where('nama_instansi', $this->request->getVar('nama_instansi'))->where('no_hp', $this->request->getVar('no_hp'))->first();
+        ], true);
 
         // Mengambil surat
         $fileSurat = $this->request->getFile('surat_peminjaman');
@@ -130,19 +142,19 @@ class Barang extends BaseController
         $fileSurat->move('files/surat', $namaSurat);
 
         $this->peminjamanBarangModel->save([
-            'id_peminjam'       => $peminjam['id_peminjam'],
-            'id_barang'         => $this->request->getVar('id_barang'),
+            'id_peminjam'       => $idPeminjam,
+            'id_barang'         => $idBarang,
             'jml_barang'        => $this->request->getVar('jml_barang'),
             'tgl_pinjam'        => $this->request->getVar('tgl_pinjam'),
             'tgl_kembali'       => $this->request->getVar('tgl_kembali'),
-            'tgl_permohonan'    => $this->request->getVar('tgl_permohonan'),
-            'tgl_selesai'       => '',
+            'tgl_permohonan'    => date("Y/m/d"),
+            'tgl_selesai'       => null,
             'keperluan'         => $this->request->getVar('keperluan'),
             'status'            => 'pending',
             'surat_peminjaman'  => $namaSurat
         ]);
 
         session()->setFlashdata('pesan', 'Data berhasil ditambahkan.');
-        return redirect()->to(base_url() . '/user/status');
+        return redirect()->to(base_url() . '/user/status/barang');
     }
 }

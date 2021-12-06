@@ -33,9 +33,6 @@
   <!-- Custom CSS -->
   <link href="<?= base_url('dist/css/sb-admin-2.css') ?>" rel="stylesheet">
 
-  <!-- Morris Charts CSS -->
-  <link href="<?= base_url('vendor/morrisjs/morris.css') ?>" rel="stylesheet">
-
   <!-- Custom Fonts -->
   <link href="<?= base_url('vendor/font-awesome/css/font-awesome.min.css') ?>" rel="stylesheet" type="text/css">
 
@@ -60,12 +57,7 @@
 
   <!-- Metis Menu -->
   <script src="<?= base_url('vendor/metisMenu/metisMenu.min.js') ?>"></script>
-
-  <!-- Morris Charts -->
-  <script src="<?= base_url('vendor/raphael/raphael.min.js') ?>"></script>
-  <script src="<?= base_url('vendor/morrisjs/morris.min.js') ?>"></script>
-  <script src="<?= base_url('data/morris-data.js') ?>"></script>
-
+  
   <!-- DataTables -->
   <script src="<?= base_url('vendor/datatables/js/jquery.dataTables.min.js') ?>"></script>
   <script src="<?= base_url('vendor/datatables-plugins/dataTables.bootstrap.min.js') ?>"></script>

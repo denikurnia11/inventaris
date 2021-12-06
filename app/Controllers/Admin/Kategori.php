@@ -93,4 +93,13 @@ class Kategori extends BaseController
         session()->setFlashdata('pesan', 'Data berhasil dihapus.');
         return redirect()->to(base_url() . '/admin/kategori');
     }
+
+    public function cetak()
+    {
+        $data = [
+            'title' => 'Laporan Data Kategori',
+            'kategori' => $this->kategoriModel->findAll()
+        ];
+        return view('kategori/cetak', $data);
+    }
 }
