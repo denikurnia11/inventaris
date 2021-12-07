@@ -71,7 +71,7 @@ class User extends BaseController
             ],
         ])) {
             // Redirect
-            return redirect()->to(base_url() . '/admin/user/tambah')->withInput();
+            return redirect()->back()->withInput();
         }
 
         $this->userModel->save([

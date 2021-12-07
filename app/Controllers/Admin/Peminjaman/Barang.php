@@ -64,7 +64,7 @@ class Barang extends BaseController
         session()->setFlashdata('pesan', 'Peminjaman telah disetujui');
         return redirect()->to(base_url('admin/barang/peminjaman'));
       case 'kembali':
-        if ($data['status'] != 'pending') {
+        if ($data['status'] != 'dipinjam') {
           session()->setFlashdata('pesan', 'Status gagal');
           return redirect()->to(base_url('admin/barang/peminjaman/' . $id));
         }
@@ -72,6 +72,7 @@ class Barang extends BaseController
         $this->barangModel->totalBarang($barang['id_barang'], $barang['jml_barang'] + $data['jml_barang']);
         // Mengganti status di tabel peminjaman
         $this->peminjamanBarangModel->changeStatus($id, 'selesai');
+        $this->peminjamanBarangModel->set('tgl_selesai', date("Y/m/d"))->where('id_peminjaman', $id)->update();
         // Menggati status di tabel peminjam
         $this->peminjamModel->changeStatus($data['id_peminjam'], 'disetujui');
         session()->setFlashdata('pesan', 'Peminjaman telah disetujui');

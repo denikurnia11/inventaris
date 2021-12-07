@@ -20,7 +20,7 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         <a href="<?= base_url('admin/user/tambah') ?>" class="btn btn-primary btn-sm">Tambah</a>
-        <a href="<?= base_url('admin/user/cetak') ?>" class="btn btn-success btn-sm">Cetak</a>
+        <!-- <a href="<?= base_url('admin/user/cetak') ?>" class="btn btn-success btn-sm">Cetak</a> -->
       </div>
       <div class="panel-body">
         <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
