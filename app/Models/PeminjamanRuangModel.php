@@ -34,9 +34,9 @@ class PeminjamanRuangModel extends Model
     {
         return $this
             ->select('id_peminjaman, nama_peminjam, nama_ruangan, tgl_permohonan, tgl_pinjam, tgl_kembali, tgl_selesai, peminjaman_ruang.status')
-            ->where('tgl_permohonan >=', $tglAwal ? $tglAwal : '0000-00-00')
-            ->where('tgl_permohonan <=', $tglAkhir ? $tglAkhir : '2222-00-00')
-            ->whereIn('peminjaman_ruang.status', ['selesai', 'dipinjam'. 'batal'])
+            ->where('tgl_pinjam >=', $tglAwal ? $tglAwal : '0000-00-00')
+            ->where('tgl_pinjam <=', $tglAkhir ? $tglAkhir : '2222-00-00')
+            ->whereIn('peminjaman_ruang.status', ['selesai', 'dipinjam', 'batal'])
             ->join('ruangan', 'ruangan.id_ruangan=peminjaman_ruang.id_ruangan')
             ->join('peminjam', 'peminjam.id_peminjam=peminjaman_ruang.id_peminjam')
             ->findAll();

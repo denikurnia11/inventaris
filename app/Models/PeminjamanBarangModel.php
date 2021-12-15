@@ -30,8 +30,8 @@ class PeminjamanBarangModel extends Model
   {
     return $this
       ->select('id_peminjaman, nama_peminjam, nama_barang, peminjaman_barang.jml_barang, tgl_permohonan, tgl_pinjam, tgl_kembali, tgl_selesai, peminjaman_barang.status')
-      ->where('tgl_permohonan >=', $tglAwal ? $tglAwal : '0000-00-00')
-      ->where('tgl_permohonan <=', $tglAkhir ? $tglAkhir : '2222-00-00')
+      ->where('tgl_pinjam >=', $tglAwal ? $tglAwal : '0000-00-00')
+      ->where('tgl_pinjam <=', $tglAkhir ? $tglAkhir : '2222-00-00')
       ->whereIn('peminjaman_barang.status', ['selesai', 'dipinjam', 'batal'])
       ->join('barang', 'barang.id_barang=peminjaman_barang.id_barang')
       ->join('peminjam', 'peminjam.id_peminjam=peminjaman_barang.id_peminjam')
