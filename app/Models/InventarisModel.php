@@ -10,10 +10,10 @@ class InventarisModel extends Model
     protected $primaryKey           = 'id_inventaris';
     protected $allowedFields        = ['id_kategori', 'nama_inventaris',  'deskripsi', 'foto', 'tgl_perolehan', 'harga', 'status'];
 
-    // public function getData()
-    // {
-    //     return $this->join('kategori', 'kategori.id_kategori=barang.id_kategori')->findAll();
-    // }
+    public function getData()
+    {
+        return $this->join('kategori', 'kategori.id_kategori=inventaris.id_kategori')->findAll();
+    }
 
     // public function totalBarang($id, $jml)
     // {
