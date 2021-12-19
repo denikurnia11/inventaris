@@ -4,14 +4,12 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class PeminjamanRuangModel extends Model
+class PeminjamanModel extends Model
 {
-    protected $table         = 'peminjaman_ruang';
+    protected $table         = 'peminjaman';
     protected $primaryKey    = 'id_peminjaman';
     protected $allowedFields = [
         'id_peminjam',
-        'id_ruangan',
-        'jml_barang',
         'tgl_pinjam',
         'tgl_kembali',
         'tgl_permohonan',
@@ -19,6 +17,32 @@ class PeminjamanRuangModel extends Model
         'keperluan',
         'status',
         'surat_peminjaman'
+    ];
+    protected $validationRules = [
+        'id_peminjam'        => 'required',
+        'tgl_pinjam'         => 'required',
+        'tgl_kembali'        => 'required',
+        'keperluan'          => 'required',
+        'surat_peminjaman' => 'uploaded[surat_peminjaman]|ext_in[surat_peminjaman,pdf,docx]|max_size[surat_peminjaman,1024]'
+    ];
+    protected $validationMessages = [
+        'id_peminjam'          => [
+            'required' => 'Id Peminjam harus diisi'
+        ],
+        'tgl_pinjam'    => [
+            'required' => 'Tanggal harus diisi'
+        ],
+        'tgl_kembali'    => [
+            'required' => 'Tanggal harus diisi'
+        ],
+        'keperluan'            => [
+            'required' => 'Keperluan harus diisi'
+        ],
+        'surat_peminjaman'           => [
+            'uploaded'   => 'Surat harus diisi.',
+            'ext_in'     => 'Surat harus berextensi pdf atau word',
+            'max_size'   => 'Surat maksimal 1mb.',
+        ],
     ];
 
     public function getData($id = null)

@@ -33,29 +33,29 @@ class Filters extends BaseConfig
         'before' => [
             // 'honeypot',
             // 'csrf',
-            'adminfilter' => [
-                'except' => [
-                    '/', '/login', '/daftar', '/auth/*'
-                ]
-            ],
-            'userfilter' => [
-                'except' => [
-                    '/', '/login', '/daftar', '/auth/*'
-                ]
-            ]
+            // 'adminfilter' => [
+            //     'except' => [
+            //         '/', '/login', '/daftar', '/auth/*'
+            //     ]
+            // ],
+            // 'userfilter' => [
+            //     'except' => [
+            //         '/', '/login', '/daftar', '/auth/*'
+            //     ]
+            // ]
         ],
         'after' => [
             'toolbar',
-            'adminfilter' => [
-                'except' => [
-                    'admin', 'admin/*', '/logout'
-                ]
-            ],
-            'userfilter' => [
-                'except' => [
-                    'user', 'user/*', '/logout'
-                ]
-            ],
+            // 'adminfilter' => [
+            //     'except' => [
+            //         'admin', 'admin/*', '/logout'
+            //     ]
+            // ],
+            // 'userfilter' => [
+            //     'except' => [
+            //         'user', 'user/*', '/logout'
+            //     ]
+            // ],
         ],
     ];
 

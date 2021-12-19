@@ -43,6 +43,8 @@ $routes->get('/admin', 'Admin/Barang::index');
 
 // User
 $routes->get('/user', 'User/Barang::index');
+
+$routes->resource('api/peminjaman');
 /*
  * --------------------------------------------------------------------
  * Additional Routing
