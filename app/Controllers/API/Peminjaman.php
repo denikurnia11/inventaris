@@ -3,81 +3,114 @@
 namespace App\Controllers\API;
 
 use App\Models\DetailModel;
+use App\Models\InventarisModel;
 use App\Models\PeminjamanModel;
 use App\Models\PeminjamModel;
 use CodeIgniter\RESTful\ResourceController;
 
 class Peminjaman extends ResourceController
 {
-    protected $detailModel, $kategoriModel, $peminjamanModel, $peminjamModel;
+    protected $detailModel, $kategoriModel, $peminjamanModel, $peminjamModel, $inventarisModel;
     public function __construct()
     {
         $this->peminjamModel = new PeminjamModel();
         $this->peminjamanModel = new PeminjamanModel();
         $this->detailModel = new DetailModel();
+        $this->inventarisModel = new InventarisModel();
     }
-    /**
-     * Return an array of resource objects, themselves in array format
-     *
-     * @return mixed
-     */
 
     public function index()
     {
-        //
+        // Check if request logged in
+        if (session()->idUser === null) return $this->failForbidden('Tidak punya akses');
+
+        // If the user is 'admin' then respond all the record, else if the user is 'user' then respond record in the current user
+        if (session()->role === 'admin') {
+            // If 'status' query not exist then return all record
+            $peminjaman = ($this->request->getGet('status')) ?
+                $this->peminjamanModel->getDataByStatus($this->request->getGet('status')) :
+                $this->peminjamanModel->findAll();
+            return $this->respond($peminjaman);
+        } else if (session()->role === 'user') {
+            $peminjaman = $this->peminjamanModel->getDataByUser(session()->idUser);
+            return $this->respond($peminjaman);
+        }
     }
 
-    /**
-     * Return the properties of a resource object
-     *
-     * @return mixed
-     */
     public function show($id = null)
     {
-        //
+        // $peminjaman = $this->peminjamanModel->find($id);
+        // $peminjam = $this->peminjamModel->find($peminjaman)
+        return $this->fail('awdwa');
     }
 
-    /**
-     * Return a new resource object, with default properties
-     *
-     * @return mixed
-     */
-    public function new()
-    {
-        //
-    }
-
-    /**
-     * Create a new resource object, from "posted" parameters
-     *
-     * @return mixed
-     */
     public function create()
     {
+        $validation =  \Config\Services::validation();
+        $validation->setRules([
+            'tgl_pinjam' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Tanggal harus diisi.'
+                ]
+            ],
+            'tgl_kembali' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Tanggal harus diisi.'
+                ]
+            ],
+            'keperluan' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Keperluan harus diisi.'
+                ]
+            ],
+            'surat_peminjaman' => [
+                'rules'  => 'uploaded[surat_peminjaman]|ext_in[surat_peminjaman,pdf,docx]|max_size[surat_peminjaman,1024]',
+                'errors' => [
+                    'uploaded'   => 'Surat harus diisi.',
+                    'ext_in'     => 'Surat harus berextensi pdf atau word',
+                    'max_size'   => 'Surat maksimal 1mb.',
+                ]
+            ],
+            'nama_peminjam' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Nama peminjam harus diisi.'
+                ]
+            ],
+            'nama_instansi' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Nama instansi harus diisi.'
+                ]
+            ],
+            'no_hp' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Nomor telepon harus diisi.'
+                ]
+            ],
+        ]);
+        $validation->withRequest($this->request)->run();
 
-        // $data = [
-        //     'nama_peminjam' => $this->request->getPost('nama_peminjam'),
-        //     'nama_instansi' => $this->request->getPost('nama_instansi'),
-        //     'no_hp' => $this->request->getPost('no_hp'),
-        //     'tgl_pinjam' => $this->request->getPost('tgl_pinjam'),
-        //     'tgl_kembali' => $this->request->getPost('tgl_kembali'),
-        //     'keperluan' => $this->request->getPost('keperluan'),
-        //     'surat_peminjaman' => $this->request->getPost('surat_peminjaman'),
-        //     'inventaris' => $this->request->getPost('inventaris'),
-        // ];
+        if ($validation->getErrors()) {
+            return $this->respond([
+                'status'   => 'fail',
+                'errors' => $validation->getErrors()
+            ], 400);
+        }
+
         $data = $this->request->getPost();
-        // $data = json_decode(file_get_contents("php://input"));
-        // $data = json_decode(json_encode($data), true);
+
         $idPeminjam = $this->peminjamModel->insert([
-            'id_user'          => 1,
+            'id_user'          => $data['id_user'],
             'nama_peminjam'    => $data['nama_peminjam'],
             'nama_instansi'    => $data['nama_instansi'],
             'no_hp'            => $data['no_hp'],
             'status'           => 'pending'
         ], true);
-        if (!$idPeminjam) {
-            return $this->fail($this->peminjamModel->errors());
-        }
 
         // Mengambil surat
         $fileSurat = $this->request->getFile('surat_peminjaman');
@@ -96,53 +129,129 @@ class Peminjaman extends ResourceController
             'status' => 'pending',
             'surat_peminjaman' => $namaSurat
         ], true);
-        if (!$idPeminjaman) {
-            return $this->fail($this->peminjamanModel->errors());
-        }
 
+        $arr = json_decode($data['inventaris'], true);
         $inventaris = array();
-        for ($i = 0; $i < count($data['inventaris']); $i++) {
+        for ($i = 0; $i < count($arr); $i++) {
+            $_inv = $this->inventarisModel->find($arr[$i]);
+            if (!$_inv || $_inv['status'] == 'tidak tersedia') {
+                return $this->respond([
+                    'status'   => 'error',
+                    'message' => 'barang/ruang tidak tersedia'
+                ], 400);
+            }
             $inventaris[$i] = [
                 'id_peminjaman' => $idPeminjaman,
-                'id_inventaris' => $data['inventaris'][$i]
+                'id_inventaris' => $arr[$i]
             ];
         }
+
         $this->detailModel->insertBatch($inventaris);
         $response = [
             'status'   => 201,
             'messages' => 'Data Berhasil Ditambahkan'
         ];
-
+        session()->setFlashdata('pesan', 'Peminjaman berhasil diajukan');
         return $this->respond($response, 201);
     }
 
-    /**
-     * Return the editable properties of a resource object
-     *
-     * @return mixed
-     */
-    public function edit($id = null)
+    public function batal($id = null)
     {
-        //
+        $peminjaman = $this->peminjamanModel->find($id);
+
+        if (!$peminjaman) return $this->failNotFound();
+
+        if ($peminjaman['status'] != 'pending') {
+            return $this->fail('peminjaman tidak dapat dibatalkan');
+        }
+        // Mengganti status di tabel peminjaman
+        $this->peminjamanModel->changeStatus($id, 'batal');
+        $this->peminjamanModel->set('tgl_selesai', date("Y/m/d"))->where('id_peminjaman', $id)->update();
+        // Menggati status di tabel peminjam
+        $this->peminjamModel->changeStatus($peminjaman['id_peminjam'], 'batal');
+        session()->setFlashdata('pesan', 'Peminjaman telah dibatalkan');
+        return $this->respond([
+            'message' => 'Peminjaman telah dibatalkan'
+        ]);
     }
 
-    /**
-     * Add or update a model resource, from "posted" properties
-     *
-     * @return mixed
-     */
-    public function update($id = null)
+    public function tolak($id = null)
     {
-        //
+        if (session()->role !== 'admin') return $this->failForbidden();
+
+        $peminjaman = $this->peminjamanModel->find($id);
+
+        if (!$peminjaman) return $this->failNotFound();
+
+        if ($peminjaman['status'] != 'pending') {
+            return $this->fail('peminjaman tidak dapat ditolak');
+        }
+        // Mengganti status di tabel peminjaman
+        $this->peminjamanModel->changeStatus($id, 'batal');
+        // Menggati status di tabel peminjam
+        $this->peminjamModel->changeStatus($peminjaman['id_peminjam'], 'ditolak');
+        session()->setFlashdata('pesan', 'Peminjaman telah ditolak');
+        return $this->respond([
+            'message' => 'peminjaman telah ditolak'
+        ]);
     }
 
-    /**
-     * Delete the designated resource object from the model
-     *
-     * @return mixed
-     */
-    public function delete($id = null)
+    public function setuju($id = null)
     {
-        //
+        if (session()->role !== 'admin') return $this->failForbidden();
+
+        $peminjaman = $this->peminjamanModel->find($id);
+
+        if (!$peminjaman) return $this->failNotFound();
+
+        if ($peminjaman['status'] != 'pending') {
+            return $this->fail('peminjaman tidak dapat disetujui');
+        }
+        // Mengganti status di tabel peminjaman
+        $this->peminjamanModel->changeStatus($id, 'dipinjam');
+        // Menggati status di tabel peminjam
+        $this->peminjamModel->changeStatus($peminjaman['id_peminjam'], 'disetujui');
+
+        $detail = $this->detailModel->where('id_peminjaman', $id)->findAll();
+
+        for ($i = 0; $i < count($detail); $i++) {
+            $inventaris = $this->inventarisModel->find($detail[$i]['id_inventaris']);
+            if ($inventaris['status'] == 'tidak tersedia') {
+                return $this->fail('barang/ruang tidak tersedia');
+            }
+            $this->inventarisModel->changeStatus($inventaris['id_inventaris'], 'tidak tersedia');
+        }
+
+        session()->setFlashdata('pesan', 'Peminjaman telah disetujui');
+        return $this->respond([
+            'message' => 'peminjaman telah disetujui'
+        ]);
+    }
+
+    public function kembali($id = null)
+    {
+        if (session()->role !== 'admin') return $this->failForbidden();
+
+        $peminjaman = $this->peminjamanModel->find($id);
+
+        if (!$peminjaman) return $this->failNotFound();
+
+        if ($peminjaman['status'] != 'dipinjam') {
+            return $this->fail('peminjaman tidak dapat dikembalikan');
+        }
+        // Mengganti status di tabel peminjaman
+        $this->peminjamanModel->changeStatus($id, 'selesai');
+        $this->peminjamanModel->set('tgl_selesai', date("Y/m/d"))->where('id_peminjaman', $id)->update();
+
+        $detail = $this->detailModel->where('id_peminjaman', $id)->findAll();
+
+        for ($i = 0; $i < count($detail); $i++) {
+            $this->inventarisModel->changeStatus($detail[$i]['id_inventaris'], 'tersedia');
+        }
+
+        session()->setFlashdata('pesan', 'Peminjaman telah dikembalikan');
+        return $this->respond([
+            'message' => 'peminjaman telah dikembalikan'
+        ]);
     }
 }

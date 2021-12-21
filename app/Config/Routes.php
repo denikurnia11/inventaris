@@ -31,19 +31,23 @@ $routes->setAutoRoute(true);
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('/', 'Auth/Login::index');
+$routes->get('/', 'Auth\Login::index');
 
 // Auth
-$routes->get('/login', 'Auth/Login::index');
-$routes->get('/daftar', 'Auth/Registrasi::index');
-$routes->get('/logout', 'Auth/Login::logout');
+$routes->get('/login', 'Auth\Login::index');
+$routes->get('/daftar', 'Auth\Registrasi::index');
+$routes->get('/logout', 'Auth\Login::logout');
 
 // Admin
-$routes->get('/admin', 'Admin/Barang::index');
+$routes->get('/admin', 'Admin\Inventaris::index');
 
 // User
-$routes->get('/user', 'User/Barang::index');
+$routes->get('/user', 'User\Peminjaman::index');
 
+$routes->get('api/peminjaman/(:segment)/batal', 'API\Peminjaman::batal/$1');
+$routes->get('api/peminjaman/(:segment)/tolak', 'API\Peminjaman::tolak/$1');
+$routes->get('api/peminjaman/(:segment)/setuju', 'API\Peminjaman::setuju/$1');
+$routes->get('api/peminjaman/(:segment)/kembali', 'API\Peminjaman::kembali/$1');
 $routes->resource('api/peminjaman');
 /*
  * --------------------------------------------------------------------

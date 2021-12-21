@@ -21,26 +21,22 @@ class Inventaris extends BaseController
             'title'  => 'Data Inventaris',
             'inventaris' => $this->inventarisModel->getData()
         ];
-        // return view('inventaris/index', $data);
-        // dd($data);
-        return json_encode($data);
+        return view('inventaris/index', $data);
     }
 
     public function tambah()
     {
         $data = [
             'title'    => 'Form Tambah Data',
-            'kategori' => $this->kategoriModel->findAll(), // Dropdown
+            'kategori' => $this->kategoriModel->findAll(),
             'validasi' => \Config\Services::validation()
         ];
-        // dd($data);
-        // return view('barang/tambah', $data);
-        return json_encode($data);
+        return view('inventaris/tambah', $data);
     }
 
     public function save()
     {
-        // dd($this->request->getVar());
+
         //Validasi
         if (!$this->validate([
             'id_inventaris' => [
@@ -90,12 +86,6 @@ class Inventaris extends BaseController
                     'max_size' => 'Ukuran maksimal 1mb',
                 ]
             ],
-            'status' => [
-                'rules'  => 'required',
-                'errors' => [
-                    'required' => 'Status harus diisi.'
-                ]
-            ],
         ])) {
             // Redirect
             return redirect()->back()->withInput();
@@ -105,35 +95,35 @@ class Inventaris extends BaseController
         $fileFoto = $this->request->getFile('foto');
         // Membuat nama random untuk fotonya
         $namaFoto = $fileFoto->getRandomName();
-        // Move ke folder public/files/barang
-        $fileFoto->move('files/barang', $namaFoto);
+        // Move ke folder public/files/inventaris
+        $fileFoto->move('files/inventaris', $namaFoto);
 
-        $this->inventarisModel->save([
-            'id_invenaris'      => $this->request->getVar('id_invenaris'),
+        $this->inventarisModel->insert([
+            'id_inventaris'     => $this->request->getVar('id_inventaris'),
             'id_kategori'       => $this->request->getVar('id_kategori'),
             'nama_inventaris'   => $this->request->getVar('nama_inventaris'),
             'tgl_perolehan'     => $this->request->getVar('tgl_perolehan'),
             'harga'             => $this->request->getVar('harga'),
             'foto'              => $namaFoto,
             'deskripsi'         => $this->request->getVar('deskripsi'),
-            'status'            => $this->request->getVar('status'),
+            'status'            => 'tersedia',
         ]);
 
         session()->setFlashdata('pesan', 'Data berhasil ditambahkan.');
-        return redirect()->to(base_url() . '/admin/inventaris');
+        return redirect()->to(base_url('admin/inventaris'));
     }
 
     public function edit($id)
     {
+        $inventaris = $this->inventarisModel->find($id);
+        if ($inventaris == null) return redirect()->to(base_url('admin/inventaris'));
         $data = [
             'title'        => 'Form Edit Data',
-            'inventaris'   => $this->inventarisModel->find($id),
-            'kategori'     => $this->kategoriModel->findAll(), // Dropdown
+            'inventaris'   => $inventaris,
+            'kategori'     => $this->kategoriModel->findAll(),
             'validasi'     => \Config\Services::validation()
         ];
-        // return view('inventaris/edit', $data);
-        // dd($data);
-        return json_encode($data);
+        return view('inventaris/edit', $data);
     }
 
     public function update($id)
@@ -141,7 +131,7 @@ class Inventaris extends BaseController
         //Validasi
         if (!$this->validate([
             'id_inventaris' => [
-                'rules'  => 'required|is_unique[inventaris.id_inventaris,id_inventaris,$id]',
+                'rules'  => 'required' . ($this->request->getVar('id_inventaris') === $id ? '' : '|is_unique[inventaris.id_inventaris,id_inventaris,$id]'),
                 'errors' => [
                     'required'  => 'ID Inventaris harus diisi.',
                     'is_unique' => 'ID Inventaris sudah tersedia.'
@@ -178,24 +168,9 @@ class Inventaris extends BaseController
                     'required' => 'Deskripsi harus diisi.'
                 ]
             ],
-            'foto' => [
-                'rules' => 'uploaded[foto]|is_image[foto]|mime_in[foto,image/jpg,image/jpeg,image/png]|max_size[foto,1024]',
-                'errors' => [
-                    'uploaded' => 'Foto harus diisi.',
-                    'is_image' => 'File harus berupa gambar',
-                    'mime_in'  => 'File harus berupa gambar',
-                    'max_size' => 'Ukuran maksimal 1mb',
-                ]
-            ],
-            'status' => [
-                'rules'  => 'required',
-                'errors' => [
-                    'required' => 'Status harus diisi.'
-                ]
-            ],
         ])) {
             // Redirect
-            return redirect()->to(base_url() . '/admin/inventaris/edit/' . $id)->withInput();
+            return redirect()->to(base_url('admin/inventaris/edit/' . $id))->withInput();
         }
 
         // Mengambil foto baru
@@ -208,36 +183,44 @@ class Inventaris extends BaseController
         } else {
             // Membuat nama random untuk fotonya
             $namaFoto = $fileFoto->getRandomName();
-            // Move ke folder public/files/barang
-            $fileFoto->move('files/barang', $namaFoto);
+            // Move ke folder public/files/inventaris
+            $fileFoto->move('files/inventaris', $namaFoto);
             // Hapus file lama
-            unlink('files/barang/' . $fotoLama);
+            unlink('files/inventaris/' . $fotoLama);
         }
 
         $this->inventarisModel->update($id, [
-            'id_invenaris'      => $this->request->getVar('id_invenaris'),
+            'id_inventaris'     => $this->request->getVar('id_inventaris'),
             'id_kategori'       => $this->request->getVar('id_kategori'),
             'nama_inventaris'   => $this->request->getVar('nama_inventaris'),
             'tgl_perolehan'     => $this->request->getVar('tgl_perolehan'),
             'harga'             => $this->request->getVar('harga'),
             'foto'              => $namaFoto,
             'deskripsi'         => $this->request->getVar('deskripsi'),
-            'status'            => $this->request->getVar('status'),
         ]);
 
         session()->setFlashdata('pesan', 'Data berhasil diubah.');
-        return redirect()->to(base_url() . '/admin/inventaris');
+        return redirect()->to(base_url('admin/inventaris'));
     }
 
     public function hapus($id)
     {
         // Nama foto
-        $namaFoto = $this->inventarisModel->find($id);
+        $inventaris = $this->inventarisModel->find($id);
         // Hapus file foto
-        unlink('files/barang/' . $namaFoto['foto']);
+        unlink('files/inventaris/' . $inventaris['foto']);
         // Hapus data
         $this->inventarisModel->delete($id);
         session()->setFlashdata('pesan', 'Data berhasil dihapus.');
         return redirect()->to(base_url() . '/admin/inventaris');
+    }
+
+    public function cetak()
+    {
+        $data = [
+            'title' => 'Laporan Data Inventaris',
+            'inventaris' => $this->inventarisModel->getData()
+        ];
+        return view('inventaris/cetak', $data);
     }
 }

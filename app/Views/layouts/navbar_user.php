@@ -27,30 +27,11 @@
   <div class="navbar-default sidebar" role="navigation">
     <div class="sidebar-nav navbar-collapse">
       <ul class="nav" id="side-menu">
-        <!-- <li>
-          <a href="<?= base_url('dashboard'); ?>"><i class="fa fa-home fa-fw"></i> Halaman Utama</a>
-        </li> -->
         <li>
-          <a href="#"><i class="fa fa-folder fa-fw"></i> Peminjaman<span class="fa arrow"></span></a>
-          <ul class="nav nav-second-level">
-            <li>
-              <a href="<?= base_url('user/barang'); ?>"><i class="fa fa-desktop fa-fw"></i> Data Barang</a>
-            </li>
-            <li>
-              <a href="<?= base_url('user/ruangan'); ?>"><i class="fa fa-archive fa-fw"></i> Data Ruangan</a>
-            </li>
-          </ul>
+          <a href="<?= base_url('user/peminjaman') ?>"><i class="fa fa-folder fa-fw"></i> Peminjaman</a>
         </li>
         <li>
-          <a href="#"><i class="fa fa-comment fa-fw"></i> Status Peminjaman<span class="fa arrow"></span></a>
-          <ul class="nav nav-second-level">
-            <li>
-              <a href="<?= base_url('user/status/barang'); ?>"><i class="fa fa-desktop fa-fw"></i> Data Barang</a>
-            </li>
-            <li>
-              <a href="<?= base_url('user/status/ruangan'); ?>"><i class="fa fa-archive fa-fw"></i> Data Ruangan</a>
-            </li>
-          </ul>
+          <a href="<?= base_url('user/peminjaman/status') ?>"><i class="fa fa-comment fa-fw"></i> Status Peminjaman</a>
         </li>
         <li>
           <a href="<?= base_url('logout') ?>"><i class="fa fa-power-off fa-fw"></i> Logout</a>

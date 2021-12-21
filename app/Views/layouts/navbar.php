@@ -27,17 +27,11 @@
   <div class="navbar-default sidebar" role="navigation">
     <div class="sidebar-nav navbar-collapse">
       <ul class="nav" id="side-menu">
-        <!-- <li>
-          <a href="<?= base_url('dashboard'); ?>"><i class="fa fa-home fa-fw"></i> Halaman Utama</a>
-        </li> -->
         <li>
           <a href="#"><i class="fa fa-folder fa-fw"></i> Data Master<span class="fa arrow"></span></a>
           <ul class="nav nav-second-level">
             <li>
-              <a href="<?= base_url('admin/barang'); ?>"><i class="fa fa-desktop fa-fw"></i> Data Barang</a>
-            </li>
-            <li>
-              <a href="<?= base_url('admin/ruangan'); ?>"><i class="fa fa-archive fa-fw"></i> Data Ruangan</a>
+              <a href="<?= base_url('admin/inventaris'); ?>"><i class="fa fa-desktop fa-fw"></i> Data Inventaris</a>
             </li>
             <li>
               <a href="<?= base_url('admin/kategori'); ?>"><i class="fa fa-list fa-fw"></i> Data Kategori</a>
@@ -48,37 +42,13 @@
           </ul>
         </li>
         <li>
-          <a href="#"><i class="fa fa-comment fa-fw"></i> Request Peminjaman<span class="fa arrow"></span></a>
-          <ul class="nav nav-second-level">
-            <li>
-              <a href="<?= base_url('admin/barang/request'); ?>"><i class="fa fa-desktop fa-fw"></i> Data Barang</a>
-            </li>
-            <li>
-              <a href="<?= base_url('admin/ruangan/request'); ?>"><i class="fa fa-archive fa-fw"></i> Data Ruangan</a>
-            </li>
-          </ul>
+          <a href="<?= base_url('admin/peminjaman/request') ?>"><i class="fa fa-comment fa-fw"></i> Request Peminjaman</a>
         </li>
         <li>
-          <a href="#"><i class="fa fa-book fa-fw"></i> Daftar Peminjaman<span class="fa arrow"></span></a>
-          <ul class="nav nav-second-level">
-            <li>
-              <a href="<?= base_url('admin/barang/peminjaman'); ?>"><i class="fa fa-desktop fa-fw"></i> Data Barang</a>
-            </li>
-            <li>
-              <a href="<?= base_url('admin/ruangan/peminjaman'); ?>"><i class="fa fa-archive fa-fw"></i> Data Ruangan</a>
-            </li>
-          </ul>
+          <a href="<?= base_url('admin/peminjaman') ?>"><i class="fa fa-book fa-fw"></i> Daftar Peminjaman</a>
         </li>
         <li>
-          <a href="#"><i class="fa fa-file-text fa-fw"></i> Laporan<span class="fa arrow"></span></a>
-          <ul class="nav nav-second-level">
-            <li>
-              <a href="<?= base_url('admin/barang/laporan'); ?>"><i class="fa fa-desktop fa-fw"></i> Data Barang</a>
-            </li>
-            <li>
-              <a href="<?= base_url('admin/ruangan/laporan'); ?>"><i class="fa fa-archive fa-fw"></i> Data Ruangan</a>
-            </li>
-          </ul>
+          <a href="<?= base_url('admin/peminjaman/laporan') ?>"><i class="fa fa-file-text fa-fw"></i> Laporan</a>
         </li>
         <li>
           <a href="<?= base_url('logout') ?>"><i class="fa fa-power-off fa-fw"></i> Logout</a>

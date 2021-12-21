@@ -31,31 +31,31 @@ class Filters extends BaseConfig
      */
     public $globals = [
         'before' => [
-            // 'honeypot',
+            'honeypot',
             // 'csrf',
-            // 'adminfilter' => [
-            //     'except' => [
-            //         '/', '/login', '/daftar', '/auth/*'
-            //     ]
-            // ],
-            // 'userfilter' => [
-            //     'except' => [
-            //         '/', '/login', '/daftar', '/auth/*'
-            //     ]
-            // ]
+            'adminfilter' => [
+                'except' => [
+                    '/', '/login', '/daftar', '/auth', '/auth/*'
+                ]
+            ],
+            'userfilter' => [
+                'except' => [
+                    '/', '/login', '/daftar', '/auth', '/auth/*'
+                ]
+            ]
         ],
         'after' => [
             'toolbar',
-            // 'adminfilter' => [
-            //     'except' => [
-            //         'admin', 'admin/*', '/logout'
-            //     ]
-            // ],
-            // 'userfilter' => [
-            //     'except' => [
-            //         'user', 'user/*', '/logout'
-            //     ]
-            // ],
+            'adminfilter' => [
+                'except' => [
+                    '/admin', 'admin/*', '/logout', '/api', '/api/*'
+                ]
+            ],
+            'userfilter' => [
+                'except' => [
+                    '/user', 'user/*', '/logout', '/api', '/api/*'
+                ]
+            ],
         ],
     ];
 
