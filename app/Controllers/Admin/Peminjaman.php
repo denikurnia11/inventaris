@@ -54,9 +54,17 @@ class Peminjaman extends BaseController
     // Get tanggal awal
     $tglAwal = $this->request->getVar('tgl_awal');
     $tglAkhir = $this->request->getVar('tgl_akhir');
+    $peminjaman = $this->peminjamanModel->getLaporan($tglAwal, $tglAkhir);
+    $inventaris = $this->peminjamanModel
+      ->select('peminjaman.id_peminjaman, inventaris.id_inventaris, inventaris.nama_inventaris')
+      ->join('detail_peminjaman', 'peminjaman.id_peminjaman=detail_peminjaman.id_peminjaman')
+      ->join('inventaris', 'detail_peminjaman.id_inventaris=inventaris.id_inventaris')
+      ->findAll();
+
     $data = [
       'title'     => 'Laporan Peminjaman',
-      'peminjaman' => $this->peminjamanModel->getLaporan($tglAwal, $tglAkhir)
+      'peminjaman' => $peminjaman,
+      'inventaris' => $inventaris
     ];
 
     return view('peminjaman/laporan', $data);
@@ -67,11 +75,19 @@ class Peminjaman extends BaseController
     // Get tanggal awal
     $tglAwal = $this->request->getVar('tgl_awal');
     $tglAkhir = $this->request->getVar('tgl_akhir');
+    $peminjaman = $this->peminjamanModel->getLaporan($tglAwal, $tglAkhir);
+    $inventaris = $this->peminjamanModel
+      ->select('peminjaman.id_peminjaman, inventaris.id_inventaris, inventaris.nama_inventaris')
+      ->join('detail_peminjaman', 'peminjaman.id_peminjaman=detail_peminjaman.id_peminjaman')
+      ->join('inventaris', 'detail_peminjaman.id_inventaris=inventaris.id_inventaris')
+      ->findAll();
+
     $data = [
       'title'     => 'Cetak Laporan Peminjaman',
-      'peminjaman' => $this->peminjamanModel->getLaporan($tglAwal, $tglAkhir)
+      'peminjaman' => $peminjaman,
+      'inventaris' => $inventaris
     ];
 
-    return view('peminjaman/laporan_cetak', $data);
+    return view('peminjaman/cetak', $data);
   }
 }

@@ -67,6 +67,7 @@ function badge($status)
               <td>No.</td>
               <td>ID Peminjaman</td>
               <td>Nama Peminjam</td>
+              <td>Inventaris</td>
               <td>Tanggal Permohonan</td>
               <td>Tanggal Pinjam</td>
               <td>Tanggal Kembali</td>
@@ -82,6 +83,15 @@ function badge($status)
                 <td><?= $no++; ?></td>
                 <td><?= $row['id_peminjaman'] ?></td>
                 <td><?= $row['nama_peminjam'] ?></td>
+                <td>
+                  <?php foreach ($inventaris as $inv) : ?>
+                    <?php if ($inv['id_peminjaman'] == $row['id_peminjaman']) : ?>
+                      <ul style="padding-left: 16px;">
+                        <?= '<li>' . $inv['nama_inventaris'] . '</li>' ?>
+                      </ul>
+                    <?php endif ?>
+                  <?php endforeach ?>
+                </td>
                 <td><?= date('d F Y', strtotime($row['tgl_permohonan'])) ?></td>
                 <td><?= date('d F Y', strtotime($row['tgl_pinjam'])) ?></td>
                 <td><?= date('d F Y', strtotime($row['tgl_kembali'])) ?></td>

@@ -27,10 +27,15 @@ class Peminjaman extends ResourceController
         // If the user is 'admin' then respond all the record, else if the user is 'user' then respond record in the current user
         if (session()->role === 'admin') {
             // If 'status' query not exist then return all record
-            $peminjaman = ($this->request->getGet('status')) ?
-                $this->peminjamanModel->getDataByStatus($this->request->getGet('status')) :
-                $this->peminjamanModel->findAll();
-            return $this->respond($peminjaman);
+            $tglAwal = $this->request->getVar('tgl_awal');
+            $tglAkhir = $this->request->getVar('tgl_akhir');
+            $peminjaman = $this->peminjamanModel->getLaporan($tglAwal, $tglAkhir);
+            $inventaris = $this->detailModel->getData();
+
+            return $this->respond([
+                'peminjaman' => $peminjaman,
+                'inventaris' => $inventaris
+            ]);
         } else if (session()->role === 'user') {
             $peminjaman = $this->peminjamanModel->getDataByUser(session()->idUser);
             return $this->respond($peminjaman);

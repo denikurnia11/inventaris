@@ -27,7 +27,6 @@
               <td>Nama</td>
               <td>Kategori</td>
               <td>Deskripsi</td>
-              <td>Status</td>
               <td>Pinjam</td>
             </tr>
           </thead>
@@ -40,7 +39,6 @@
               <td>Acer Nitro 42</td>
               <td>Laptop</td>
               <td>laptop gimang sejuta umat</td>
-              <td>tersedia</td>
               <td class="text-center">
                 <button class="btn btn-primary btn-xs">Pinjam</button>
               </td>
@@ -84,7 +82,6 @@
         <td>${e.nama_inventaris}</td>
         <td>${e.nama_kategori}</td>
         <td>${e.deskripsi}</td>
-        <td>${e.status}</td>
         <td class="text-center">
           <input type="checkbox" name="id" value="${e.id_inventaris}" onchange="updateList(this)">
         </td>

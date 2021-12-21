@@ -10,12 +10,16 @@ class DetailModel extends Model
     protected $primaryKey           = 'id_detail';
     protected $allowedFields        = ['id_peminjaman', 'id_inventaris'];
 
-    public function getData($id)
+    public function getData($id = null)
     {
-        return $this
-            ->join('inventaris', 'inventaris.id_inventaris=detail_peminjaman.id_inventaris')
-            ->join('kategori', 'inventaris.id_kategori=kategori.id_kategori')
-            ->where('id_peminjaman', $id)
-            ->findAll();
+        if ($id) {
+            return $this
+                ->join('inventaris', 'inventaris.id_inventaris=detail_peminjaman.id_inventaris')
+                ->join('kategori', 'inventaris.id_kategori=kategori.id_kategori')
+                ->where('id_peminjaman', $id)
+                ->findAll();
+        }
+
+        return $this->join('inventaris', 'inventaris.id_inventaris=detail_peminjaman.id_inventaris')->findAll();
     }
 }

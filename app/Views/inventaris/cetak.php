@@ -96,7 +96,7 @@ $fmt = new NumberFormatter('id_ID', NumberFormatter::CURRENCY);
     window.print();
     setTimeout(() => {
       location.replace('<?= base_url('admin/inventaris') ?>')
-    }, 5000)
+    }, 3000)
   </script>
 </body>
 
